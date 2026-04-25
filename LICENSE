@@ -1,14 +1,247 @@
-MIT License
+LicenseSeal Non-Commercial Usage License
+Version 1.0
 
-Copyright (c) 2026 LicenseSeal Contributors
+Copyright (c) 2026 Ralf Krümmel
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, subject to the following conditions:
+Project: LicenseSeal
+Repository: https://github.com/kruemmel-python/LicenseSeal.git
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Definitions
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+"LicenseSeal" means the software, source code, documentation, tools, scripts,
+examples, models, configurations, generated files, and related materials made
+available under this license.
+
+"Author" means Ralf Krümmel.
+
+"User" means any natural person or legal entity that downloads, installs,
+copies, modifies, executes, integrates, distributes, studies, or otherwise uses
+LicenseSeal.
+
+"Non-Commercial Use" means use that is not primarily intended for or directed
+toward commercial advantage, monetary compensation, paid services, revenue
+generation, internal business operations, commercial product development,
+enterprise compliance, consulting, resale, software-as-a-service, or any other
+business or professional purpose.
+
+"Commercial Use" includes, but is not limited to:
+- use by a company, organization, contractor, consultant, or commercial entity;
+- use in paid client work;
+- use in proprietary or revenue-generating software;
+- use in enterprise compliance, audit, legal, IP protection, or security
+  workflows;
+- use as part of a hosted service, SaaS platform, managed service, or internal
+  business tool;
+- redistribution or integration into a commercial product or commercial
+  development workflow.
+
+"Protected Project" means any project, repository, software package, dataset,
+notebook, binary, documentation set, or other artifact that is marked, scanned,
+registered, watermarked, signed, analyzed, protected, or otherwise processed
+using LicenseSeal.
+
+2. Grant of Rights
+
+Subject to the terms of this license, the Author grants Users a limited,
+worldwide, non-exclusive, non-transferable, royalty-free license to use, copy,
+study, modify, and share LicenseSeal solely for Non-Commercial Use.
+
+This license allows Non-Commercial Use for purposes such as:
+- personal learning;
+- academic research;
+- private experimentation;
+- evaluation of LicenseSeal;
+- non-commercial open-source research;
+- defensive study of software provenance, watermarking, and license compliance.
+
+3. Non-Commercial Restriction
+
+Commercial Use of LicenseSeal is not permitted without prior written permission
+from the Author.
+
+Any User wishing to use LicenseSeal commercially must obtain a separate
+commercial license from the Author.
+
+Requests for commercial licensing should be directed to the Author through the
+official project repository:
+
+https://github.com/kruemmel-python/LicenseSeal.git
+
+4. Mandatory Attribution and License Notice
+
+Any copy, fork, modification, distribution, or public use of LicenseSeal must
+retain the following notice:
+
+    LicenseSeal
+    Copyright (c) 2026 Ralf Krümmel
+    Repository: https://github.com/kruemmel-python/LicenseSeal.git
+    Licensed under the LicenseSeal Non-Commercial Usage License.
+
+This notice must remain visible in the source code, documentation, or other
+appropriate accompanying materials.
+
+5. Mandatory Notice in Protected Projects
+
+Any Protected Project that uses LicenseSeal, or is marked, scanned, registered,
+watermarked, signed, analyzed, protected, or otherwise processed using
+LicenseSeal, must include a copy of this license or a clear reference to it.
+
+At minimum, the Protected Project must contain one of the following:
+
+a) a LICENSE-SEAL.txt file containing this license; or
+
+b) a NOTICE file containing the following text:
+
+    This project uses LicenseSeal for software provenance, watermarking,
+    auditability, or IP protection.
+
+    LicenseSeal was developed by Ralf Krümmel.
+    Repository: https://github.com/kruemmel-python/LicenseSeal.git
+
+    LicenseSeal is provided under the LicenseSeal Non-Commercial Usage License.
+    Commercial use requires separate permission from the author.
+
+This requirement applies regardless of whether LicenseSeal is included directly
+in the Protected Project or used externally as part of a build, audit,
+watermarking, registry, scanning, or compliance workflow.
+
+6. No Relicensing of LicenseSeal
+
+Users may not relicense LicenseSeal, remove attribution, obscure the origin of
+LicenseSeal, or present LicenseSeal or a derivative work as their own original
+software.
+
+Modified versions of LicenseSeal must clearly state that they are based on
+LicenseSeal and must retain attribution to the Author.
+
+7. Restrictions
+
+Users may not:
+
+a) use LicenseSeal for Commercial Use without a separate commercial license;
+
+b) sell, sublicense, rent, lease, host, or provide LicenseSeal as a paid service
+   without written permission from the Author;
+
+c) remove, alter, or hide LicenseSeal attribution, copyright notices, license
+   notices, provenance markers, or author information;
+
+d) use LicenseSeal to falsely claim ownership of software, datasets, notebooks,
+   binaries, or other artifacts created by others;
+
+e) use LicenseSeal for unlawful surveillance, unauthorized access, malware,
+   exploitation, harassment, fraud, extortion, or any other illegal purpose;
+
+f) use LicenseSeal to intentionally create false evidence of authorship,
+   ownership, copying, license infringement, or provenance;
+
+g) use LicenseSeal in a way that violates applicable laws, regulations, export
+   controls, privacy rights, intellectual property rights, or contractual
+   obligations.
+
+8. Defensive and Evidentiary Use
+
+LicenseSeal is intended as a defensive tool for software provenance,
+watermarking, auditability, license compliance, and intellectual property
+protection.
+
+LicenseSeal does not by itself establish legal ownership, infringement, or
+liability. Any technical evidence generated by LicenseSeal should be reviewed by
+qualified technical and legal professionals before being used in legal,
+commercial, disciplinary, or enforcement proceedings.
+
+9. Derivative Works
+
+Users may create modified versions of LicenseSeal for Non-Commercial Use,
+provided that:
+
+a) the modified version remains subject to this license;
+
+b) the modified version clearly states that it is derived from LicenseSeal;
+
+c) all copyright, attribution, and license notices are preserved;
+
+d) the modified version is not used commercially without a separate commercial
+   license from the Author.
+
+10. Distribution
+
+Users may distribute LicenseSeal or modified versions of LicenseSeal only for
+Non-Commercial Use and only if the complete text of this license is included
+with the distribution.
+
+Any distribution must preserve all copyright notices, attribution notices,
+license notices, repository references, and disclaimers.
+
+11. No Trademark or Endorsement Rights
+
+This license does not grant permission to use the name "LicenseSeal", the name
+of the Author, repository branding, logos, or other identifying marks in a way
+that suggests endorsement, sponsorship, partnership, or official approval,
+unless expressly permitted in writing by the Author.
+
+12. Disclaimer of Warranty
+
+LICENSESEAL IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR
+A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, RELIABILITY, SECURITY, OR
+AVAILABILITY.
+
+THE AUTHOR DOES NOT WARRANT THAT LICENSESEAL WILL BE ERROR-FREE, SECURE,
+UNINTERRUPTED, LEGALLY SUFFICIENT, OR SUITABLE FOR ANY PARTICULAR USE CASE.
+
+13. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE AUTHOR SHALL NOT BE
+LIABLE FOR ANY CLAIM, DAMAGE, LOSS, LIABILITY, COST, EXPENSE, OR OTHER HARM
+ARISING FROM OR RELATED TO THE USE, MISUSE, INABILITY TO USE, DISTRIBUTION,
+MODIFICATION, OR RELIANCE ON LICENSESEAL.
+
+THIS INCLUDES, WITHOUT LIMITATION, DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES; LOSS OF PROFITS; LOSS OF DATA;
+BUSINESS INTERRUPTION; LEGAL DISPUTES; COMPLIANCE FAILURES; OR THIRD-PARTY
+CLAIMS.
+
+14. Termination
+
+This license terminates automatically if a User violates any of its terms.
+
+Upon termination, the User must immediately stop using, copying, modifying,
+distributing, hosting, or integrating LicenseSeal and must remove LicenseSeal
+from any unauthorized commercial or non-compliant use.
+
+Sections concerning attribution, restrictions, disclaimer of warranty,
+limitation of liability, evidentiary use, and termination survive termination.
+
+15. Separate Commercial Licensing
+
+Commercial licenses, enterprise licenses, consulting agreements, support
+contracts, hosted-service permissions, or special permissions may be granted
+separately by the Author in writing.
+
+Such separate agreements may override or supplement this license only for the
+specific party and scope described in that written agreement.
+
+16. Governing Interpretation
+
+If any provision of this license is found to be unenforceable, invalid, or
+inapplicable, the remaining provisions remain in full force and effect.
+
+The intent of this license is to allow non-commercial learning, research,
+evaluation, and defensive experimentation while reserving all commercial rights
+to the Author.
+
+17. Summary
+
+You may use LicenseSeal for non-commercial learning, research, evaluation, and
+defensive experimentation.
+
+You may not use LicenseSeal commercially without permission.
+
+You must preserve attribution to Ralf Krümmel.
+
+Projects protected, marked, scanned, registered, watermarked, signed, analyzed,
+or otherwise processed using LicenseSeal must include this license or a clear
+LicenseSeal notice.
+
+Commercial use requires a separate license from the Author.
