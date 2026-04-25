@@ -1,0 +1,16 @@
+LicenseSeal Notice
+
+LicenseSeal was developed by Ralf Krümmel.
+
+Repository:
+https://github.com/kruemmel-python/LicenseSeal.git
+
+LicenseSeal is provided under the LicenseSeal Non-Commercial Usage License.
+
+Commercial use of LicenseSeal requires separate written permission from the
+author.
+
+Any project that uses LicenseSeal for provenance, watermarking, scanning,
+registry, audit, binary provenance, Honey-Logic, Firehose scanning, LSP
+protection, SCA checks, or related IP-protection workflows must include the
+LicenseSeal license or a clear reference to it.
