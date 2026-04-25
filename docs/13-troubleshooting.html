@@ -1,0 +1,149 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="d4daeca9f1c2" data-token="d4daeca9f1c2">13 Troubleshooting</h1>
+<h2 id="6b9b6718de7c" data-token="6b9b6718de7c"><code>licenseseal</code> wird nicht gefunden</h2>
+<p data-token="148e7909571c">Versuche:</p>
+<pre data-token="e1b87f0cc47e"><code class="language-powershell">python -m licenseseal --help
+</code></pre>
+<p data-token="32030ce98263">Wenn das funktioniert, liegt ein PATH-Problem vor. Aktiviere deine virtuelle Umgebung oder prüfe Scripts-Pfade.</p>
+<h2 id="b40ad3bc2308" data-token="b40ad3bc2308">Editable Install schlägt fehl</h2>
+<p data-token="da72788439ad">Fehler:</p>
+<pre data-token="40c7e6aa20b9"><code class="language-text">Multiple top-level packages discovered in a flat-layout
+</code></pre>
+<p data-token="90391386f5f1">Dieses Projekt enthält bereits die Korrektur in <code>pyproject.toml</code>. Prüfe, ob du die aktuelle ZIP-Version verwendest.</p>
+<h2 id="ec6a01783891" data-token="ec6a01783891"><code>[full]</code> dauert lange</h2>
+<p data-token="1a040dd2297e">Das Full-Extra installiert auch schwere AI-Abhängigkeiten wie Torch und Sentence Transformers. Für Grundtests reicht:</p>
+<pre data-token="a099fb288c9a"><code class="language-powershell">python -m pip install -e .
+</code></pre>
+<p data-token="ab172968098d">Oder gezielt:</p>
+<pre data-token="523bfc9e90b5"><code class="language-powershell">python -m pip install -e &quot;.[crypto,lsp]&quot;
+</code></pre>
+<h2 id="886cb8ea2cc6" data-token="886cb8ea2cc6">WeasyPrint installiert nicht</h2>
+<p data-token="fd7b5ea82797">Reports mit PDF können systemabhängige Bibliotheken benötigen. Nutze zunächst HTML/JSON-Reports oder installiere das <code>reports</code>-Extra später.</p>
+<h2 id="f798e7e753cc" data-token="f798e7e753cc">Redis/Celery nicht verfügbar</h2>
+<p data-token="56c6030b63d8">Der lokale Firehose-Modus funktioniert trotzdem:</p>
+<pre data-token="b7e7632882d3"><code class="language-powershell">licenseseal firehose scan ./suspected
+</code></pre>
+<p data-token="1738c223f95c">Queue-Funktionen benötigen Redis/Celery:</p>
+<pre data-token="09a82309168f"><code class="language-powershell">python -m pip install -e &quot;.[queue]&quot;
+</code></pre>
+<h2 id="a2136b733d6d" data-token="a2136b733d6d">Ollama nicht erreichbar</h2>
+<p data-token="ecf5fd9525db">Prüfe:</p>
+<pre data-token="6eb946c57182"><code class="language-powershell">curl http://localhost:11434
+</code></pre>
+<p data-token="3ef064abc73a">Starte Ollama und prüfe Modellnamen.</p>
+<h2 id="ebbe8d87174f" data-token="ebbe8d87174f">LM Studio nicht erreichbar</h2>
+<p data-token="ce55c6f9e4d5">In LM Studio muss der lokale Server aktiviert sein. Häufig:</p>
+<pre data-token="b9c57456ae67"><code class="language-text">http://localhost:1234/v1
+</code></pre>
+<h2 id="2e89637a8d13" data-token="2e89637a8d13">Audit meldet fehlende Marker</h2>
+<p data-token="5baf8385f320">Führe aus:</p>
+<pre data-token="c1b013f038f4"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --update
+</code></pre>
+<p data-token="e545fee31f96">Oder im CI Bot:</p>
+<pre data-token="9606880daa15"><code class="language-powershell">licenseseal bot autofix . --license MIT --owner &quot;ACME GmbH&quot;
+</code></pre>
+<h2 id="33231f583add" data-token="33231f583add">Signaturprüfung schlägt fehl</h2>
+<p data-token="f0e7a757ef2a">Mögliche Ursachen:</p>
+<ul>
+<li data-token="a944a1d6cc03">Datei wurde nach Signierung geändert</li>
+<li data-token="6782fd0f5a90">falscher Public Key</li>
+<li data-token="1972ca31a12c">Marker manuell verändert</li>
+<li data-token="00dea82b7023">Zeilenenden wurden geändert</li>
+</ul>
+<p data-token="57f9f9d3affe">Lösung:</p>
+<pre data-token="d0837b77b23b"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --sign-key private.pem --update
+</code></pre>
+<h2 id="f46a4f53f6c6" data-token="f46a4f53f6c6">SCA blockiert Inject</h2>
+<p data-token="b9748f1dd720">Prüfe:</p>
+<pre data-token="3e014baa3b1f"><code class="language-powershell">licenseseal sca check . --license MIT
+</code></pre>
+<p data-token="6143f06b43d2">Nur bewusst überschreiben:</p>
+<pre data-token="98a4b264b09e"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --force
+</code></pre>
+<h2 id="92433975c343" data-token="92433975c343">Debug-Strategie</h2>
+<ul>
+<li data-token="3bc3d5562b1b"><code>licenseseal --help</code></li>
+<li data-token="9f9a597e9551"><code>licenseseal &lt;command&gt; --help</code></li>
+<li data-token="35bb03aa93ee">kleine Testdatei isoliert prüfen</li>
+<li data-token="8fea0b627581"><code>--dry-run</code> verwenden</li>
+<li data-token="c15012579519">optionales Extra gezielt installieren</li>
+<li data-token="ada5f32390b0">Exit Code und Fehlermeldung notieren</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#d4daeca9f1c2">13 Troubleshooting</a>
+<a class="tm-toc-l2" href="#6b9b6718de7c">`licenseseal` wird nicht gefunden</a>
+<a class="tm-toc-l2" href="#b40ad3bc2308">Editable Install schlägt fehl</a>
+<a class="tm-toc-l2" href="#ec6a01783891">`[full]` dauert lange</a>
+<a class="tm-toc-l2" href="#886cb8ea2cc6">WeasyPrint installiert nicht</a>
+<a class="tm-toc-l2" href="#f798e7e753cc">Redis/Celery nicht verfügbar</a>
+<a class="tm-toc-l2" href="#a2136b733d6d">Ollama nicht erreichbar</a>
+<a class="tm-toc-l2" href="#ebbe8d87174f">LM Studio nicht erreichbar</a>
+<a class="tm-toc-l2" href="#2e89637a8d13">Audit meldet fehlende Marker</a>
+<a class="tm-toc-l2" href="#33231f583add">Signaturprüfung schlägt fehl</a>
+<a class="tm-toc-l2" href="#f46a4f53f6c6">SCA blockiert Inject</a>
+<a class="tm-toc-l2" href="#92433975c343">Debug-Strategie</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

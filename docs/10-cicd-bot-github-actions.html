@@ -1,0 +1,164 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="48026ef358e9" data-token="48026ef358e9">10 CI/CD Bot und GitHub Actions</h1>
+<h2 id="b6905780c461" data-token="b6905780c461">Ziel</h2>
+<p data-token="267f4338b40e">CI/CD soll Compliance nicht nur blockieren, sondern automatisch reparieren können.</p>
+<h2 id="3d49f0a2d6c8" data-token="3d49f0a2d6c8">Einfacher Audit in GitHub Actions</h2>
+<p data-token="a6f584dfef05">Beispiel <code>.github/workflows/licenseseal.yml</code>:</p>
+<pre data-token="85375baef523"><code class="language-yaml">name: LicenseSeal
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: &quot;3.11&quot;
+      - run: python -m pip install -e &quot;.[crypto]&quot;
+      - run: licenseseal audit . --format github
+</code></pre>
+<h2 id="e941bd8e4569" data-token="e941bd8e4569">Auto-Remediation Bot</h2>
+<p data-token="1898d72980df">Der Bot kann fehlende Marker injizieren und optional einen Pull Request erstellen.</p>
+<p data-token="7d8840b01474">Lokal:</p>
+<pre data-token="11a70050d057"><code class="language-powershell">licenseseal bot autofix . --license MIT --owner &quot;ACME GmbH&quot;
+</code></pre>
+<p data-token="9419d6597a35">Mit PR-Erstellung:</p>
+<pre data-token="683434de7e51"><code class="language-powershell">licenseseal bot autofix . --license MIT --owner &quot;ACME GmbH&quot; --create-pr
+</code></pre>
+<h2 id="bed605b02c36" data-token="bed605b02c36">GitHub Action mit Auto-Fix</h2>
+<p data-token="e15286b1e4ee">Beispiel:</p>
+<pre data-token="537d2c67dc21"><code class="language-yaml">name: LicenseSeal Auto Fix
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  licenseseal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: &quot;3.11&quot;
+      - run: python -m pip install -e &quot;.[bot,crypto]&quot;
+      - run: |
+          licenseseal bot autofix . \
+            --license MIT \
+            --owner &quot;ACME GmbH&quot; \
+            --create-pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+</code></pre>
+<h2 id="24d3e67fd9d1" data-token="24d3e67fd9d1">Was der Bot tun kann</h2>
+<ul>
+<li data-token="1418473d13f4">Audit ausführen</li>
+<li data-token="4981ab307e0f">fehlende Marker ergänzen</li>
+<li data-token="0160b832842f">vorhandene Marker aktualisieren</li>
+<li data-token="cd69da9d2a71">Branch erzeugen</li>
+<li data-token="e5a10ba818c4">Commit erzeugen</li>
+<li data-token="dce624128e9d">Pull Request erstellen</li>
+</ul>
+<h2 id="048324fa6eb3" data-token="048324fa6eb3">Was der Bot nicht tun sollte</h2>
+<ul>
+<li data-token="b3b0fe7efb5d">automatisch Lizenzentscheidungen treffen, die rechtlich unklar sind</li>
+<li data-token="f4fd55a389ce">sensible Dateien ohne Review verändern</li>
+<li data-token="9004a887fd26">generierte Artefakte markieren, wenn sie nicht Teil der Source-of-Truth sind</li>
+</ul>
+<h2 id="33b5d23d571d" data-token="33b5d23d571d">Empfohlene Branch-Namen</h2>
+<pre data-token="975c0c1b5d89"><code class="language-text">licenseseal/auto-fix
+licenseseal/auto-fix-2026-04-26
+</code></pre>
+<h2 id="f30980006063" data-token="f30980006063">Übung</h2>
+<ul>
+<li data-token="9d00db42f18b">Erstelle ein Testrepo</li>
+<li data-token="7934b6f6e1b0">Entferne Marker aus einer Datei</li>
+<li data-token="b524bf33d6ee">Führe <code>licenseseal bot autofix .</code> aus</li>
+<li data-token="8c3e8d764ca4">Prüfe <code>git diff</code></li>
+<li data-token="1f69a5e86660">Entscheide, ob die Änderung commitfähig ist</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#48026ef358e9">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-toc-l2" href="#b6905780c461">Ziel</a>
+<a class="tm-toc-l2" href="#3d49f0a2d6c8">Einfacher Audit in GitHub Actions</a>
+<a class="tm-toc-l2" href="#e941bd8e4569">Auto-Remediation Bot</a>
+<a class="tm-toc-l2" href="#bed605b02c36">GitHub Action mit Auto-Fix</a>
+<a class="tm-toc-l2" href="#24d3e67fd9d1">Was der Bot tun kann</a>
+<a class="tm-toc-l2" href="#048324fa6eb3">Was der Bot nicht tun sollte</a>
+<a class="tm-toc-l2" href="#33b5d23d571d">Empfohlene Branch-Namen</a>
+<a class="tm-toc-l2" href="#f30980006063">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

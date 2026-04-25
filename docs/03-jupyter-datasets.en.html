@@ -1,0 +1,121 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="2f860af3ef11" data-token="2f860af3ef11">03 Jupyter Notebooks and Datasets</h1>
+<h2 id="68f25eb72e7b" data-token="68f25eb72e7b">Why custom support is necessary</h2>
+<p data-token="7abb253dcc01">Jupyter Notebooks are JSON files. A standard comment block at the start of the file would damage the notebook. LicenseSeal handles <code>.ipynb</code> specially.</p>
+<p data-token="698169bbddf7">Even datasets like <code>.jsonl</code> are often copied or shared in AI projects. LicenseSeal can use Sidecar Provenance files to make them traceable.</p>
+<h2 id="6d96a525992b" data-token="6d96a525992b">Mark notebook</h2>
+<pre data-token="68c9d491bcad"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;Data Science Team&quot; --project &quot;fraud-model&quot;
+</code></pre>
+<p data-token="7777f7780707">If <code>.ipynb</code> files are included, LicenseSeal:</p>
+<ul>
+<li data-token="4f6093f55d1a">a markdown cell at the beginning of the notebook</li>
+<li data-token="55b889b151c5">Notebook metadata under <code>metadata.licenseseal</code></li>
+<li data-token="5cbcb8032e60">Only a digest based on relevant code cells</li>
+</ul>
+<h2 id="1be9b451bc1e" data-token="1be9b451bc1e">Why only code cells for the digest?</h2>
+<p data-token="57bc40e552cf">Notebook outputs change constantly:</p>
+<ul>
+<li data-token="73333a1fbcd0">Execution numbers</li>
+<li data-token="871798fc6e14">Diagram</li>
+<li data-token="a7ffdbd07190">Logs</li>
+<li data-token="d599a601004b">Random values</li>
+<li data-token="16d5d7cc16b0">Timestamp</li>
+</ul>
+<p data-token="c5b304d4e22b">If the Digest included all outputs, it would be invalid after every run. Therefore, LicenseSeal focuses on code cells.</p>
+<h2 id="cd4e2ff26eea" data-token="cd4e2ff26eea">Check Notebook</h2>
+<pre data-token="10de20371fcb"><code class="language-powershell">licenseseal audit .
+</code></pre>
+<h2 id="fab8ba9e7ccc" data-token="fab8ba9e7ccc">Example structure</h2>
+<pre data-token="c0813c85b3e3"><code class="language-text">notebooks/
+  experiment.ipynb
+data/
+  train.jsonl
+  eval.jsonl
+</code></pre>
+<h2 id="1dde4ee7e24b" data-token="1dde4ee7e24b">JSONL Data Sets</h2>
+<p data-token="173339617a44">For <code>.jsonl</code> files, LicenseSeal can create a Sidecar Provenance file. This is safer than directly modifying the data because training data remains exactly reproducible.</p>
+<p data-token="57f40f01a4c4">Example:</p>
+<pre data-token="d24c93ebb991"><code class="language-text">data/train.jsonl
+data/train.jsonl.licenseseal.json
+</code></pre>
+<p data-token="00218d6f3428">The sidecar file can contain:</p>
+<pre data-token="77355db23083"><code class="language-json">{
+  &quot;schema&quot;: &quot;licenseseal.dataset.v1&quot;,
+  &quot;license&quot;: &quot;Proprietary&quot;,
+  &quot;owner&quot;: &quot;ACME GmbH&quot;,
+  &quot;content_digest&quot;: &quot;...&quot;
+}
+</code></pre>
+<h2 id="7c1224cf67d0" data-token="7c1224cf67d0">Best Practices for ML Teams</h2>
+<ul>
+<li data-token="1c0fdf758867">Highlight notebooks before sharing.</li>
+<li data-token="7a7ba418c428">Save Sidecar files together with datasets.</li>
+<li data-token="06cad764d18b">Review notebooks in CI but ignore large output diffs.</li>
+<li data-token="24054bef7b8e">Commit no sensitive data; only provenance metadata.</li>
+<li data-token="26d637a0789b">Use clear project names, e.g., <code>risk-model-q4</code>.</li>
+</ul>
+<h2 id="624b63aced6e" data-token="624b63aced6e">Exercise</h2>
+<ul>
+<li data-token="42dd3c2a2ff6">Create a notebook with a code cell</li>
+<li data-token="7019e223ff2d">Run <code>licenseseal inject .</code></li>
+<li data-token="3d71248070c7">Open the notebook and search for the Markdown marker cell</li>
+<li data-token="c9e1d07ddc5a">Run the notebook and verify afterward using <code>licenseseal audit .</code></li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#2f860af3ef11">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-toc-l2" href="#68f25eb72e7b">Warum eigene Unterstützung nötig ist</a>
+<a class="tm-toc-l2" href="#6d96a525992b">Notebook markieren</a>
+<a class="tm-toc-l2" href="#1be9b451bc1e">Warum nur Code-Zellen für den Digest?</a>
+<a class="tm-toc-l2" href="#cd4e2ff26eea">Notebook prüfen</a>
+<a class="tm-toc-l2" href="#fab8ba9e7ccc">Beispielstruktur</a>
+<a class="tm-toc-l2" href="#1dde4ee7e24b">JSONL-Datensätze</a>
+<a class="tm-toc-l2" href="#7c1224cf67d0">Best Practices für ML-Teams</a>
+<a class="tm-toc-l2" href="#624b63aced6e">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script></body></html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="c1678387b442" data-token="c1678387b442">01 Schnellstart: erstes Projekt schützen</h1>
+<h2 id="0dfa74054f86" data-token="0dfa74054f86">Ziel dieses Kapitels</h2>
+<p data-token="e540a3043827">Du schützt ein kleines Beispielprojekt, prüfst das Ergebnis und verstehst den Grundablauf.</p>
+<h2 id="b671a6eacc1f" data-token="b671a6eacc1f">Beispielprojekt anlegen</h2>
+<p data-token="e9c1c4832ea8">Erstelle einen Ordner:</p>
+<pre data-token="4646ea5c18fc"><code class="language-powershell">mkdir C:\tmp\hello-seal
+cd C:\tmp\hello-seal
+</code></pre>
+<p data-token="ff6e448f129e">Lege eine Python-Datei an:</p>
+<pre data-token="fed289061a8c"><code class="language-powershell">@&quot;
+def add(a, b):
+    return a + b
+
+print(add(2, 3))
+&quot;@ | Out-File -Encoding utf8 app.py
+</code></pre>
+<p data-token="1dc9be7587c7">Unter macOS/Linux:</p>
+<pre data-token="0889c53b5dd8"><code class="language-bash">mkdir -p /tmp/hello-seal
+cd /tmp/hello-seal
+cat &gt; app.py &lt;&lt;&#x27;PY&#x27;
+def add(a, b):
+    return a + b
+
+print(add(2, 3))
+PY
+</code></pre>
+<h2 id="8ab03c865166" data-token="8ab03c865166">Projekt markieren</h2>
+<pre data-token="697691b03b98"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;Example Corp&quot; --project &quot;hello-seal&quot;
+</code></pre>
+<p data-token="0d514c547b4d">Erwartung:</p>
+<pre data-token="c4eb5033f6d0"><code class="language-text">LicenseSeal result
+==================
+injected: 1
+</code></pre>
+<h2 id="ef1e3a639652" data-token="ef1e3a639652">Datei ansehen</h2>
+<p data-token="0f0148522075">Öffne <code>app.py</code>. Am Anfang sollte ein LicenseSeal-Block eingefügt worden sein.</p>
+<p data-token="fc62ad3cac03">Der eigentliche Code bleibt ausführbar:</p>
+<pre data-token="0e3efb81c025"><code class="language-powershell">python app.py
+</code></pre>
+<p data-token="b82fb23a289a">Erwartung:</p>
+<pre data-token="18443cb3cd30"><code class="language-text">5
+</code></pre>
+<h2 id="d8e30aa097d5" data-token="d8e30aa097d5">Projekt prüfen</h2>
+<pre data-token="e57b71cb6df3"><code class="language-powershell">licenseseal audit .
+</code></pre>
+<p data-token="77041dce7f1b">Erwartung:</p>
+<pre data-token="5ce121999538"><code class="language-text">Files missing boundary: 0
+</code></pre>
+<h2 id="83a95504ff0c" data-token="83a95504ff0c">Trockenlauf verwenden</h2>
+<p data-token="05dac6e853ff">Ein Trockenlauf zeigt, was passieren würde, ohne Dateien zu ändern:</p>
+<pre data-token="bd585bdeb2b7"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;Example Corp&quot; --dry-run
+</code></pre>
+<h2 id="288a3cafe781" data-token="288a3cafe781">Marker aktualisieren</h2>
+<p data-token="81adbd56e940">Wenn du bestehende Marker aktualisieren möchtest:</p>
+<pre data-token="7f1649987028"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;Example Corp&quot; --update
+</code></pre>
+<h2 id="9de8cbbe55ac" data-token="9de8cbbe55ac">Marker entfernen</h2>
+<p data-token="044e42739e34">Nur für Tests oder bewusstes Entfernen:</p>
+<pre data-token="b45576cc9c2b"><code class="language-powershell">licenseseal remove .
+</code></pre>
+<p data-token="8bc53e03faeb">Danach:</p>
+<pre data-token="1003c9b493d4"><code class="language-powershell">licenseseal audit .
+</code></pre>
+<p data-token="4497d144527b">Jetzt sollte die Datei als unmarkiert erscheinen.</p>
+<h2 id="9907c9127dea" data-token="9907c9127dea">Sicheres Arbeiten mit Backups</h2>
+<pre data-token="d691079c18d6"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;Example Corp&quot; --backup
+</code></pre>
+<p data-token="15016b2ea375">LicenseSeal erzeugt dann Sicherungskopien, bevor Dateien verändert werden.</p>
+<h2 id="85459273c68c" data-token="85459273c68c">Häufige Anfängerfragen</h2>
+<h3 id="ab2e2043338c" data-token="ab2e2043338c">Verändert LicenseSeal meine Programmlogik?</h3>
+<p data-token="dcaebae8f333">Der normale <code>inject</code>-Befehl fügt Kommentarblöcke hinzu. Für typische Quellcodedateien verändert das die Programmlogik nicht.</p>
+<h3 id="466500f84375" data-token="466500f84375">Muss ich jede Datei einzeln markieren?</h3>
+<p data-token="c0347303209b">Nein. Du kannst den Projektordner angeben. LicenseSeal erkennt unterstützte Dateitypen automatisch.</p>
+<h3 id="7f80340016e4" data-token="7f80340016e4">Was mache ich bei generierten Dateien?</h3>
+<p data-token="00e3ce9a2326">Generierte Dateien sollten meist ausgeschlossen werden:</p>
+<pre data-token="2130819713b7"><code class="language-powershell">licenseseal inject . --exclude-dir generated --exclude-dir dist
+</code></pre>
+<h2 id="63f76c8e3a7d" data-token="63f76c8e3a7d">Übung</h2>
+<ul>
+<li data-token="da28f2beacb0">Lege ein Beispielprojekt mit zwei Dateien an</li>
+<li data-token="31ce07c6e918">Führe <code>licenseseal inject .</code> aus</li>
+<li data-token="1f1e134ca14d">Führe <code>licenseseal audit .</code> aus</li>
+<li data-token="d9744bfb6864">Entferne die Marker mit <code>licenseseal remove .</code></li>
+<li data-token="82908bb4df75">Führe erneut <code>audit</code> aus und vergleiche das Ergebnis</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#c1678387b442">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-toc-l2" href="#0dfa74054f86">Ziel dieses Kapitels</a>
+<a class="tm-toc-l2" href="#b671a6eacc1f">Beispielprojekt anlegen</a>
+<a class="tm-toc-l2" href="#8ab03c865166">Projekt markieren</a>
+<a class="tm-toc-l2" href="#ef1e3a639652">Datei ansehen</a>
+<a class="tm-toc-l2" href="#d8e30aa097d5">Projekt prüfen</a>
+<a class="tm-toc-l2" href="#83a95504ff0c">Trockenlauf verwenden</a>
+<a class="tm-toc-l2" href="#288a3cafe781">Marker aktualisieren</a>
+<a class="tm-toc-l2" href="#9de8cbbe55ac">Marker entfernen</a>
+<a class="tm-toc-l2" href="#9907c9127dea">Sicheres Arbeiten mit Backups</a>
+<a class="tm-toc-l2" href="#85459273c68c">Häufige Anfängerfragen</a>
+<a class="tm-toc-l3" href="#ab2e2043338c">Verändert LicenseSeal meine Programmlogik?</a>
+<a class="tm-toc-l3" href="#466500f84375">Muss ich jede Datei einzeln markieren?</a>
+<a class="tm-toc-l3" href="#7f80340016e4">Was mache ich bei generierten Dateien?</a>
+<a class="tm-toc-l2" href="#63f76c8e3a7d">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

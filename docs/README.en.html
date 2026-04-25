@@ -1,0 +1,105 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="eaa390cc7c69" data-token="eaa390cc7c69">Welcome to the LicenseSeal Training and User Documentation</h1>
+<p data-token="0d7cefeade54">Welcome to the training and user documentation for LicenseSeal. This documentation is intended especially for beginners and explains not only the commands but also their purpose: How do I mark my own code? How do I check a project? How can I identify possible copies? How should I use Enterprise features safely?</p>
+<p data-token="b982b70ea569">This documentation is aimed at beginners. It explains not only the commands but also their purpose: How to mark your own code, how to check a project, how to recognize possible copies, and how to securely use Enterprise functions.</p>
+<h2 id="3a4433e8e538" data-token="3a4433e8e538">Beginner Learning Path</h2>
+<p data-token="1ff9c484792b">Recommended Order:</p>
+<ul>
+<li data-token="8aaea01e3741"><a href="00-installation.md">Installation und Grundbegriffe</a></li>
+<li data-token="97e8464d3a4e"><a href="01-quickstart.md">Schnellstart: erstes Projekt schützen</a></li>
+<li data-token="e16ee30f743a"><a href="02-core-workflows.md">Core Workflows: Inject, Audit, Compare, Remove</a></li>
+<li data-token="b8da7fec1e8d"><a href="03-jupyter-datasets.md">Jupyter Notebooks und Datensätze</a></li>
+<li data-token="971e56fc742c"><a href="04-watermark-honey-logic.md">Watermarking und Honey-Logic</a></li>
+<li data-token="6b5c13d774e2"><a href="05-audit-compare-reports.md">Audit, Vergleich und Reports</a></li>
+<li data-token="d7c4640048e0"><a href="06-firehose-osint-registry.md">Registry, Firehose und OSINT</a></li>
+<li data-token="0619e78baba8"><a href="07-ide-lsp-inbound-protection.md">IDE/LSP und Inbound Paste Protection</a></li>
+<li data-token="b75949108794"><a href="08-llm-redteam-interceptor.md">LLM Red-Team, Ollama, LM Studio und Interceptor</a></li>
+<li data-token="d955eec0c92d"><a href="09-binary-provenance.md">Binary Provenance</a></li>
+<li data-token="3169b3928dcf"><a href="10-cicd-bot-github-actions.md">CI/CD Bot und GitHub Actions</a></li>
+<li data-token="27ddab681e30"><a href="11-enterprise-control-plane.md">Enterprise Control Plane</a></li>
+<li data-token="a78dd376175a"><a href="12-sca-license-compliance.md">SCA und Lizenzkonflikte</a></li>
+<li data-token="e17853a51a74"><a href="13-troubleshooting.md">Troubleshooting</a></li>
+<li data-token="5148a3c0633b"><a href="14-glossary.md">Glossar</a></li>
+</ul>
+<h2 id="e6ca162d5947" data-token="e6ca162d5947">What LicenseSeal is</h2>
+<p data-token="c9226a92b14a">LicenseSeal is a defensive provenance-, audit-, and IP-protection tool. It helps to mark own software projects with machine-readable license and origin markers that can be verified later for integrity and better detection of unauthorized takeovers.</p>
+<h2 id="212b30723b58" data-token="212b30723b58">What LicenseSeal is not</h2>
+<p data-token="0f3a48e7ce4d">LicenseSeal is not a tool for removing foreign security mechanisms, an exploit framework, or an attack tool. All functions are intended for defensive use, compliance, auditing, origin verification, and internal quality assurance.</p>
+<h2 id="53da5b1bdaea" data-token="53da5b1bdaea">Common Daily Tasks</h2>
+<table><tbody>
+<tr><td data-token="fd908e2229db">Task</td><td data-token="d40b0cc0d158">Getting Started</td></tr>
+<tr><td data-token="0e58afb522a6">Select project:</td><td data-token="f84bf1647887"><a href="02-core-workflows.md">Core Workflows</a></td></tr>
+<tr><td data-token="dfd81a45768c">Review Project</td><td data-token="fd9cc0bd6b75"><a href="01-quickstart.md">Schnellstart</a></td></tr>
+<tr><td data-token="69fd53e11650">Compare two projects</td><td data-token="7aa73b5ef6c4"><a href="05-audit-compare-reports.md">Audit und Reports</a></td></tr>
+<tr><td data-token="f81762915b67">Protect a notebook</td><td data-token="aa48c24877cb"><a href="03-jupyter-datasets.md">Jupyter und Datensätze</a></td></tr>
+<tr><td data-token="fd4979166228">Check for license conflicts</td><td data-token="14f864c88fe4"><a href="12-sca-license-compliance.md">SCA</a></td></tr>
+<tr><td data-token="70b8ab6538e6">Integrate with IDE</td><td data-token="6e2979c0eff4"><a href="07-ide-lsp-inbound-protection.md">IDE/LSP</a></td></tr>
+<tr><td data-token="8fc9b914e08f">Review LLM Expenses</td><td data-token="0203905ce4d2"><a href="08-llm-redteam-interceptor.md">LLM Interceptor</a></td></tr>
+<tr><td data-token="80f85b775108">Automatically Fix CI Issues</td><td data-token="2fc7894621d8"><a href="10-cicd-bot-github-actions.md">CI/CD Bot</a></td></tr>
+<tr><td data-token="cc88bc9ae70b">Start Enterprise Dashboard</td><td data-token="ecfc7dbd3625"><a href="11-enterprise-control-plane.md">Control Plane</a></td></tr>
+</tbody></table>
+<h2 id="9ca190c12f4d" data-token="9ca190c12f4d">Documentation Writing Style</h2>
+<p data-token="03c856f5c5b0">Examples for Windows PowerShell:</p>
+<pre data-token="a932cf9f90ab"><code class="language-powershell">python -m pip install -e &quot;.[full]&quot;
+licenseseal audit .
+</code></pre>
+<p data-token="ebab43b4f79c">Examples for macOS/Linux:</p>
+<pre data-token="82833f94d5a7"><code class="language-bash">python -m pip install -e &quot;.[full]&quot;
+licenseseal audit .
+</code></pre>
+<p data-token="c33e8f73c256">If no differences exist, the command works across all platforms.</p></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#eaa390cc7c69">LicenseSeal Dokumentation</a>
+<a class="tm-toc-l2" href="#3a4433e8e538">Lernpfad für Anfänger</a>
+<a class="tm-toc-l2" href="#e6ca162d5947">Was LicenseSeal ist</a>
+<a class="tm-toc-l2" href="#212b30723b58">Was LicenseSeal nicht ist</a>
+<a class="tm-toc-l2" href="#53da5b1bdaea">Häufige Tagesaufgaben</a>
+<a class="tm-toc-l2" href="#9ca190c12f4d">Schreibweise in dieser Dokumentation</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script></body></html>

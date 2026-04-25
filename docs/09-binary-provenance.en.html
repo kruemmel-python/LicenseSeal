@@ -1,0 +1,116 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="cbd80ddb14e6" data-token="cbd80ddb14e6">Binary Provenance</h1>
+<h2 id="fdebcccc1213" data-token="fdebcccc1213">Objective</h2>
+<p data-token="69092ddfebb0">Source markers often disappear during compilation. Binary Provenance embeds provenance metadata into build artifacts or makes it auditable.</p>
+<h2 id="2ea1919f5df5" data-token="2ea1919f5df5">Supported Ideas</h2>
+<p data-token="7542049b4ce5">LicenseSeal provides assistance for:</p>
+<ul>
+<li data-token="10187fca66f5">-ldflags <code>-ldflags</code></li>
+<li data-token="be945a3cca4f">C/C++ Section Source</li>
+<li data-token="a795cbb90357">JAR Manifest Metadata</li>
+<li data-token="d3fdc2df33a5">Binary Audit per Byte-Scan</li>
+</ul>
+<h2 id="58255678f54c" data-token="58255678f54c">CLI</h2>
+<pre data-token="18b66ad914a4"><code class="language-powershell">licenseseal binary --help
+licenseseal binary create --help
+licenseseal binary append --help
+licenseseal binary audit --help
+</code></pre>
+<h2 id="de6280fee06f" data-token="de6280fee06f">Go Example</h2>
+<p data-token="4a94ae6c52ce">Generate Provenance Data:</p>
+<pre data-token="b1c621a01b3b"><code class="language-powershell">licenseseal binary create --project &quot;payment-service&quot; --owner &quot;ACME GmbH&quot; --output provenance.json
+</code></pre>
+<p data-token="b4fd224d5fef">Build with Go LDFlags:</p>
+<pre data-token="405bb06ba7ab"><code class="language-powershell">go build -ldflags &quot;-X main.LicenseSealProvenance=$(Get-Content provenance.json -Raw)&quot; .
+</code></pre>
+<p data-token="412293287a36">In practice, you often minify or escape the JSON string beforehand.</p>
+<h2 id="d824c3c5f82c" data-token="d824c3c5f82c">C/C++ Example</h2>
+<p data-token="71e31dc62286">LicenseSeal can generate a small C file that embeds provenance data into a section. It is then included in the build.</p>
+<p data-token="d5e84b35139d">Example Concept:</p>
+<pre data-token="2cb489adf7ec"><code class="language-c">__attribute__((section(&quot;.note.licenseseal&quot;)))
+const char LICENSESEAL_PROVENANCE[] = &quot;{...}&quot;;
+</code></pre>
+<h2 id="e312c3fd462b" data-token="e312c3fd462b">Java Example</h2>
+<p data-token="ee901740073a">For Java artifacts, metadata can be stored in <code>META-INF/MANIFEST.MF</code></p>
+<pre data-token="e59732026273"><code class="language-text">LicenseSeal-Project: payment-service
+LicenseSeal-Owner: ACME GmbH
+LicenseSeal-Digest: ...
+</code></pre>
+<h2 id="d984db55f6ec" data-token="d984db55f6ec">Verify Binary</h2>
+<pre data-token="57c3aa18f126"><code class="language-powershell">licenseseal binary audit .\app.exe
+licenseseal binary audit .\service.jar
+</code></pre>
+<h2 id="1aecc5a46f68" data-token="1aecc5a46f68">Best Practices</h2>
+<ul>
+<li data-token="7c2d1ba54af8">Include provenance in the release build</li>
+<li data-token="bac8838dbb1a">Save build logs and commit SHA.</li>
+<li data-token="9a6e22844282">Link binary provenance to source audit.</li>
+<li data-token="8ab58c9166cf">Additionally sign release artifacts.</li>
+<li data-token="f82b5888baa1">Document reproducible build recipes.</li>
+</ul>
+<h2 id="b88e634152af" data-token="b88e634152af">Exercise</h2>
+<ul>
+<li data-token="a37c5447b388">Generate a provenance file</li>
+<li data-token="f2f0a1e83eb8">Attach it to a test binary</li>
+<li data-token="75dce6052fa8">Run the <code>licenseseal binary audit</code> command</li>
+<li data-token="0ee753992908">Verify that metadata is recognized</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#cbd80ddb14e6">09 Binary Provenance</a>
+<a class="tm-toc-l2" href="#fdebcccc1213">Ziel</a>
+<a class="tm-toc-l2" href="#2ea1919f5df5">Unterstützte Ideen</a>
+<a class="tm-toc-l2" href="#58255678f54c">CLI</a>
+<a class="tm-toc-l2" href="#de6280fee06f">Go Beispiel</a>
+<a class="tm-toc-l2" href="#d824c3c5f82c">C/C++ Beispiel</a>
+<a class="tm-toc-l2" href="#e312c3fd462b">JAR Beispiel</a>
+<a class="tm-toc-l2" href="#d984db55f6ec">Binary prüfen</a>
+<a class="tm-toc-l2" href="#1aecc5a46f68">Best Practices</a>
+<a class="tm-toc-l2" href="#b88e634152af">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script></body></html>

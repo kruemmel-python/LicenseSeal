@@ -1,0 +1,129 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="2ed85bfc8d9b" data-token="2ed85bfc8d9b">07 IDE/LSP und Inbound Paste Protection</h1>
+<h2 id="5a8808afe949" data-token="5a8808afe949">Ziel</h2>
+<p data-token="1753a3fada67">LicenseSeal kann in Entwicklungsumgebungen helfen, fehlende Marker früh zu erkennen und riskante Code-Pastes zu melden.</p>
+<h2 id="fbb678ce78a5" data-token="fbb678ce78a5">LSP starten</h2>
+<p data-token="163527ff4538">Installiere das LSP-Extra:</p>
+<pre data-token="ad01fa3b3582"><code class="language-powershell">python -m pip install -e &quot;.[lsp]&quot;
+</code></pre>
+<p data-token="827eb0bb3b0c">Starte den Server:</p>
+<pre data-token="7481c3b3ccc5"><code class="language-powershell">licenseseal lsp
+</code></pre>
+<p data-token="a76706002797">Je nach Editor wird der LSP-Server in den Einstellungen eingebunden.</p>
+<h2 id="16f550713217" data-token="16f550713217">Einmaliger Check ohne Editor</h2>
+<pre data-token="ccef40b33f6d"><code class="language-powershell">licenseseal lsp-check path\to\file.py
+</code></pre>
+<p data-token="367ccd4576bb">Lizenzvalidierung:</p>
+<pre data-token="e2ba2aa0761e"><code class="language-powershell">licenseseal lsp-validate .
+</code></pre>
+<h2 id="57fee11c0d36" data-token="57fee11c0d36">Code Actions</h2>
+<p data-token="165e27fbc6d6">Wenn eine Datei keinen LicenseSeal-Marker hat, kann der LSP eine Quick-Fix-Aktion anbieten:</p>
+<pre data-token="f562c23aee47"><code class="language-text">LicenseSeal Marker injizieren
+</code></pre>
+<p data-token="931a99e64783">Der Vorteil: Entwickler müssen die IDE nicht verlassen.</p>
+<h2 id="7faff6c6e82c" data-token="7faff6c6e82c">Inbound Paste Protection</h2>
+<p data-token="6ba61267a7aa">Inbound Paste Protection erkennt große eingefügte Codeblöcke und prüft sie auf:</p>
+<ul>
+<li data-token="9cd495abdbd1">LicenseSeal Boundary Marker</li>
+<li data-token="4d455378e570">fremde Watermarks</li>
+<li data-token="3b9b76cfafde">Copyleft-Indikatoren</li>
+<li data-token="76fba754e578">strukturelle Ähnlichkeit zu bekannten Komponenten</li>
+<li data-token="0b50b43ca9fe">riskante Lizenzhinweise</li>
+</ul>
+<p data-token="41e337741ea7">Mögliche Warnung:</p>
+<pre data-token="1108647c934a"><code class="language-text">Warnung: Eingefügter Code weist starke Ähnlichkeit zu einer inkompatiblen Komponente auf.
+</code></pre>
+<h2 id="9dcc9d2874e9" data-token="9dcc9d2874e9">Empfohlene Policy</h2>
+<p data-token="cce7a19032e2">Für Unternehmen:</p>
+<table><tbody>
+<tr><td data-token="b893a653c0dd">Risiko</td><td data-token="b4647cba35c9">Empfehlung</td></tr>
+<tr><td data-token="925b3ddccb3d">AGPL/GPL in proprietärem Projekt</td><td data-token="b88a299a00bd">Error</td></tr>
+<tr><td data-token="f419fce784b9">unbekannter großer Paste</td><td data-token="244716cc1145">Warning</td></tr>
+<tr><td data-token="46df0a88f280">LicenseSeal-Marker fremder Organisation</td><td data-token="cf112e452171">Error</td></tr>
+<tr><td data-token="26fcc765c96c">MIT/BSD-kompatibler Hinweis</td><td data-token="b6e37cab3247">Info/Warning</td></tr>
+</tbody></table>
+<h2 id="cff406395b5f" data-token="cff406395b5f">Grenzen</h2>
+<p data-token="29bd2f5362fe">Der LSP kann nicht jede Lizenzverletzung beweisen. Er ist ein Shift-Left-Warnsystem, kein juristischer Entscheider.</p>
+<h2 id="24c6152c825d" data-token="24c6152c825d">Übung</h2>
+<ul>
+<li data-token="14e56eccf505">Starte den LSP</li>
+<li data-token="3efcc4892096">Öffne eine unmarkierte Datei</li>
+<li data-token="adc1f56bf478">Prüfe, ob die Diagnose erscheint</li>
+<li data-token="353b1f9afc13">Nutze die Quick Fix Aktion</li>
+<li data-token="a2522100b510">Füge einen großen fremden Codeblock in eine Testdatei ein und beobachte Warnungen</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#2ed85bfc8d9b">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-toc-l2" href="#5a8808afe949">Ziel</a>
+<a class="tm-toc-l2" href="#fbb678ce78a5">LSP starten</a>
+<a class="tm-toc-l2" href="#16f550713217">Einmaliger Check ohne Editor</a>
+<a class="tm-toc-l2" href="#57fee11c0d36">Code Actions</a>
+<a class="tm-toc-l2" href="#7faff6c6e82c">Inbound Paste Protection</a>
+<a class="tm-toc-l2" href="#9dcc9d2874e9">Empfohlene Policy</a>
+<a class="tm-toc-l2" href="#cff406395b5f">Grenzen</a>
+<a class="tm-toc-l2" href="#24c6152c825d">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

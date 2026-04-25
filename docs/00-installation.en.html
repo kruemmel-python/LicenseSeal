@@ -1,0 +1,152 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="4d29d24c435a" data-token="4d29d24c435a">00 Installation and Basic Concepts</h1>
+<h2 id="20f926289f83" data-token="20f926289f83">Goal of this chapter</h2>
+<p data-token="0621e6a2237e">After this chapter, you can install LicenseSeal, verify the CLI works, and understand the key terms.</p>
+<h2 id="6efaa57da9b3" data-token="6efaa57da9b3">Prerequisites</h2>
+<p data-token="dd17e519f50f">You need:</p>
+<ul>
+<li data-token="9e7013ee95be">Python 3.10 or newer</li>
+<li data-token="e5c9d6c09b9b">a terminal, for example PowerShell, Windows Terminal, Terminal.app, or Bash</li>
+<li data-token="04849808cb4e">optional Git if you want to use CI/CD, Bot, or Firehose Scans</li>
+<li data-token="20a6752ccc08">Optional Docker/Redis/PostgreSQL for enterprise scenarios</li>
+</ul>
+<p data-token="cd847a1d1fe0">Check Python:</p>
+<pre data-token="e60a89bd20fa"><code class="language-powershell">python --version
+</code></pre>
+<p data-token="0dcb75ea1bcc">Check pip:</p>
+<pre data-token="9625928db84f"><code class="language-powershell">python -m pip --version
+</code></pre>
+<h2 id="4453651e7fbe" data-token="4453651e7fbe">Install from project folder</h2>
+<p data-token="e8738ad09850">Switch to the extracted project folder:</p>
+<pre data-token="2ba446bca5be"><code class="language-powershell">cd C:\LICENSE_SEAL
+</code></pre>
+<p data-token="29dfd18551b7">Install the base version:</p>
+<pre data-token="cddc465c08b4"><code class="language-powershell">python -m pip install -e .
+</code></pre>
+<p data-token="6e2fe80daf59">Install the full version with all optional extras:</p>
+<pre data-token="505c45eb454a"><code class="language-powershell">python -m pip install -e &quot;.[full]&quot;
+</code></pre>
+<p data-token="8c150252d95a">On macOS/Linux, the command is identical:</p>
+<pre data-token="6d32203acc3d"><code class="language-bash">python -m pip install -e &quot;.[full]&quot;
+</code></pre>
+<h2 id="2dc88acd95c6" data-token="2dc88acd95c6">Individual Add-ons</h2>
+<p data-token="1a28cb485e7c">If you don’t want to install all dependencies, you can select specific add-ons:</p>
+<pre data-token="cf473b08e83b"><code class="language-powershell">python -m pip install -e &quot;.[crypto]&quot;
+python -m pip install -e &quot;.[lsp]&quot;
+python -m pip install -e &quot;.[enterprise]&quot;
+python -m pip install -e &quot;.[queue]&quot;
+python -m pip install -e &quot;.[control-plane]&quot;
+python -m pip install -e &quot;.[reports]&quot;
+</code></pre>
+<p data-token="5979567ffa6f">Multiple add-ons can be combined:</p>
+<pre data-token="43e0d1f96dbf"><code class="language-powershell">python -m pip install -e &quot;.[crypto,lsp,enterprise]&quot;
+</code></pre>
+<h2 id="10326ac4b323" data-token="10326ac4b323">Check installation</h2>
+<pre data-token="c55f475acebf"><code class="language-powershell">licenseseal --help
+</code></pre>
+<p data-token="20a4bd00fed5">Expectation: You see a list of commands like <code>inject</code>, <code>audit</code>, <code>compare</code>, <code>watermark</code>, <code>firehose</code>, <code>sca</code>, <code>graph</code>, <code>intercept</code>, and others.</p>
+<h2 id="5a95d3e19355" data-token="5a95d3e19355">Important Terms</h2>
+<h3 id="9b00cdf80fe6" data-token="9b00cdf80fe6">Marker</h3>
+<p data-token="e794a9b02a21">A marker is a machine-readable block at the beginning of a file. It describes license, project, owner, and optionally signature information.</p>
+<h3 id="451d06daf68c" data-token="451d06daf68c">Boundary</h3>
+<p data-token="c6e70b68b1b9">A clear boundary in the code that indicates: From here on, a <strong>LicenseSeal</strong>-protected section begins.</p>
+<h3 id="4141fab3b5a0" data-token="4141fab3b5a0">Audit</h3>
+<p data-token="233ec07bf3d0">An audit checks whether files are correctly marked and whether signatures remain valid.</p>
+<h3 id="ae32ec83c4a2" data-token="ae32ec83c4a2">A content audit checks whether files are correctly marked and whether signatures remain valid.</h3>
+<p data-token="c1b93dc07aba">A digest is a cryptographic fingerprint of the content. Even minor changes to the relevant content produce a different digest.</p>
+<h3 id="5ec621f2e227" data-token="5ec621f2e227">A watermark is an additional recognition signal. It can be visible, invisible, or semantic.</h3>
+<p data-token="5a1957969d5f">A watermark is an additional recognition signal. It can be visible, invisible, or semantic.</p>
+<h3 id="9a2d5756dcdf" data-token="9a2d5756dcdf">Honey-Dots</h3>
+<p data-token="61247c9bb0ed">Harmless, functionally correct code snippets with very specific mathematical structures. They serve as strong indicators if they reappear in external repositories.</p>
+<h3 id="63abe685d0b1" data-token="63abe685d0b1">Registry</h3>
+<p data-token="a11fdb283633">The Registry stores known projects, fingerprints, scan results, and evidence items.</p>
+<h3 id="721ac05d3ea4" data-token="721ac05d3ea4">Firehose</h3>
+<p data-token="b31f24a0fd5b">The Firehose is the continuous scanner. It checks candidate repositories and reports evidence to the Registry.</p>
+<h2 id="6c880b615761" data-token="6c880b615761">Typical installation error: Multiple top-level packages</h2>
+<p data-token="f1a27088e09d">When you see:</p>
+<pre data-token="49e9c8c7e5a1"><code class="language-text">Multiple top-level packages discovered in a flat-layout
+</code></pre>
+<p data-token="77d0aefa98ab">Setuptools finds multiple package directories. This project already includes the necessary fix in <code>pyproject.toml</code>:</p>
+<pre data-token="b2c0c7959ec5"><code class="language-toml">[tool.setuptools.packages.find]
+include = [&quot;licenseseal&quot;, &quot;licenseseal.*&quot;]
+exclude = [&quot;Notebook_LM&quot;, &quot;Notebook_LM.*&quot;, &quot;tests&quot;, &quot;tests.*&quot;]
+</code></pre>
+<h2 id="d02260508fbe" data-token="d02260508fbe">First diagnosis:</h2>
+<p data-token="bc2ba198f2e7">If a command is not found:</p>
+<pre data-token="c159178baf4a"><code class="language-powershell">python -m licenseseal --help
+</code></pre>
+<p data-token="ffcf135fa223">If it works but <code>licenseseal</code> doesn't, there’s usually a PATH issue with the Python environment:</p>
+<h2 id="d236a90443b4" data-token="d236a90443b4">Exercise</h2>
+<ul>
+<li data-token="63d13e025687">Install LicenseSeal with <code>python -m pip install -e .</code></li>
+<li data-token="a7f05c05ca6a">Run <code>licenseseal --help</code></li>
+<li data-token="c1a343ea6ff2">Note three commands you see</li>
+<li data-token="6c349837bd50">Open then <a href="01-quickstart.md">Quick Start</a></li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#4d29d24c435a">00 Installation und Grundbegriffe</a>
+<a class="tm-toc-l2" href="#20f926289f83">Ziel dieses Kapitels</a>
+<a class="tm-toc-l2" href="#6efaa57da9b3">Voraussetzungen</a>
+<a class="tm-toc-l2" href="#4453651e7fbe">Installation aus dem Projektordner</a>
+<a class="tm-toc-l2" href="#2dc88acd95c6">Einzelne Extras</a>
+<a class="tm-toc-l2" href="#10326ac4b323">Installation prüfen</a>
+<a class="tm-toc-l2" href="#5a95d3e19355">Wichtige Begriffe</a>
+<a class="tm-toc-l3" href="#9b00cdf80fe6">Marker</a>
+<a class="tm-toc-l3" href="#451d06daf68c">Boundary</a>
+<a class="tm-toc-l3" href="#4141fab3b5a0">Audit</a>
+<a class="tm-toc-l3" href="#ae32ec83c4a2">CONTENT_DIGEST</a>
+<a class="tm-toc-l3" href="#5ec621f2e227">Watermark</a>
+<a class="tm-toc-l3" href="#9a2d5756dcdf">Honey-Logic</a>
+<a class="tm-toc-l3" href="#63abe685d0b1">Registry</a>
+<a class="tm-toc-l3" href="#721ac05d3ea4">Firehose</a>
+<a class="tm-toc-l2" href="#6c880b615761">Typischer Installationsfehler: Multiple top-level packages</a>
+<a class="tm-toc-l2" href="#d02260508fbe">Erste Diagnose</a>
+<a class="tm-toc-l2" href="#d236a90443b4">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script></body></html>

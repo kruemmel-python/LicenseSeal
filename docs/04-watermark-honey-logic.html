@@ -1,0 +1,141 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="5e57f0e68285" data-token="5e57f0e68285">04 Watermarking und Honey-Logic</h1>
+<h2 id="081b881475eb" data-token="081b881475eb">Ziel</h2>
+<p data-token="ecf9a77f812a">Dieses Kapitel erklärt zusätzliche Wiedererkennungssignale jenseits normaler Lizenzmarker.</p>
+<h2 id="928104cbeb81" data-token="928104cbeb81">Arten von Watermarks</h2>
+<p data-token="ad3bd3f71d30">LicenseSeal unterstützt mehrere Signalarten:</p>
+<table><tbody>
+<tr><td data-token="515081b05461">Art</td><td data-token="9aec4575d7e8">Beschreibung</td></tr>
+<tr><td data-token="a0d920c90ccd">Stärke</td><td data-token="297be1488d32">Boundary Marker</td></tr>
+<tr><td data-token="1847e51f5a45">sichtbarer Kommentarblock</td><td data-token="30d36152b523">stark bei direkter Kopie</td></tr>
+<tr><td data-token="60df816697d1">Zero-Width Watermark</td><td data-token="b1c58826323f">unsichtbare Unicode-Zeichen</td></tr>
+<tr><td data-token="2fcdd94b5848">gut gegen Header-Entfernung</td><td data-token="33ea7c73f13a">Semantic Watermark</td></tr>
+<tr><td data-token="daa02b4cea85">kleine semantische Strukturmerkmale</td><td data-token="36709c69c9e2">robuster gegen Formatierung</td></tr>
+<tr><td data-token="9757d266b74e">Honey-Logic</td><td data-token="bc7d2c252852">harmlose mathematische Code-Sentinels</td></tr>
+<tr><td data-token="0073313d5b0c">starkes statistisches Indiz</td><td data-token="5b679783bcc0">Multi-Language Honey-Logic</td></tr>
+<tr><td data-token="81e57aa75ebe">Sentinels für Python, JS/TS, Go, Rust, Java</td><td data-token="428df2ad485b">polyglotte Projekte</td></tr>
+</tbody></table>
+<h2 id="a3eacd7f9421" data-token="a3eacd7f9421">Watermark einbetten</h2>
+<p data-token="d934db2df761">Nutze die Hilfe, um die genauen Optionen deines Builds zu sehen:</p>
+<pre data-token="47a3060f18e5"><code class="language-powershell">licenseseal watermark --help
+licenseseal watermark embed --help
+</code></pre>
+<p data-token="ed72b8663630">Typischer Ablauf:</p>
+<pre data-token="355cc0e8457d"><code class="language-powershell">licenseseal watermark embed src/app.py --message &quot;ACME:payment-service&quot;
+</code></pre>
+<p data-token="c5055e38697d">Watermark extrahieren:</p>
+<pre data-token="6c6d98afd8f2"><code class="language-powershell">licenseseal watermark extract src/app.py
+</code></pre>
+<h2 id="b566c3fbadac" data-token="b566c3fbadac">Honey-Logic</h2>
+<p data-token="fc2f16ef22b4">Honey-Logic ist ausführbare, harmlose Logik mit seltenen Konstanten und Operatorfolgen. Sie ist nicht dafür gedacht, Verhalten zu sabotieren oder fremde Systeme zu beeinflussen. Sie dient nur der späteren Wiedererkennung eigener Softwarebestandteile.</p>
+<h2 id="475187527bbb" data-token="475187527bbb">Multi-Language Honey-Logic erzeugen</h2>
+<pre data-token="d1693ec95475"><code class="language-powershell">licenseseal honey-multilang --help
+</code></pre>
+<p data-token="f69abc5db476">Beispielidee:</p>
+<pre data-token="d40f7bcaeacf"><code class="language-powershell">licenseseal honey-multilang --language python --project &quot;payment-service&quot; --owner &quot;ACME GmbH&quot;
+licenseseal honey-multilang --language go --project &quot;payment-service&quot; --owner &quot;ACME GmbH&quot;
+licenseseal honey-multilang --language typescript --project &quot;payment-service&quot; --owner &quot;ACME GmbH&quot;
+</code></pre>
+<h2 id="72b0a9595834" data-token="72b0a9595834">Warum Honey-Logic funktioniert</h2>
+<p data-token="8bc4ae6aa63b">Ein einzelner Name kann geändert werden. Deshalb bewertet LicenseSeal nicht nur Namen, sondern:</p>
+<ul>
+<li data-token="9184d8b74cdc">Zahlenkonstanten</li>
+<li data-token="34ead67abba9">Operator-Reihenfolge</li>
+<li data-token="8a326683209a">AST-Form</li>
+<li data-token="cee31d152ae9">Kontrollfluss</li>
+<li data-token="d52a2ca99f52">Bitshifts und Masken</li>
+<li data-token="81fcd074384d">projektabhängige Seeds</li>
+</ul>
+<h2 id="45a6cbe6a2a3" data-token="45a6cbe6a2a3">Erkennung</h2>
+<p data-token="da6a5368db25">Honey-Logic wird von Firehose, Interceptor und Scannern als Evidence Signal verwendet. Ein Treffer ist kein automatisches Urteil, aber ein starkes technisches Indiz.</p>
+<h2 id="f147107e6794" data-token="f147107e6794">Vorsicht bei produktivem Code</h2>
+<p data-token="53748f963f0d">Füge Honey-Logic nur dort ein, wo sie:</p>
+<ul>
+<li data-token="8326ada949be">keine Performance-Probleme verursacht,</li>
+<li data-token="b82c0c3efd9c">keine fachliche Logik verfälscht,</li>
+<li data-token="10e06f49560d">durch Code Review akzeptiert ist,</li>
+<li data-token="16ddf3418830">dokumentiert und intern genehmigt wurde.</li>
+</ul>
+<h2 id="5fb95de83c29" data-token="5fb95de83c29">Übung</h2>
+<ul>
+<li data-token="4f9c412bf40d">Erzeuge einen Honey-Logic-Snippet für Python</li>
+<li data-token="686534d3a13c">Füge ihn in ein Testprojekt ein</li>
+<li data-token="5b0859ba3f0b">Kopiere die Datei in einen zweiten Ordner</li>
+<li data-token="7beeb6761f9e">Nutze Firehose oder Interceptor, um den Treffer zu erkennen</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#5e57f0e68285">04 Watermarking und Honey-Logic</a>
+<a class="tm-toc-l2" href="#081b881475eb">Ziel</a>
+<a class="tm-toc-l2" href="#928104cbeb81">Arten von Watermarks</a>
+<a class="tm-toc-l2" href="#a3eacd7f9421">Watermark einbetten</a>
+<a class="tm-toc-l2" href="#b566c3fbadac">Honey-Logic</a>
+<a class="tm-toc-l2" href="#475187527bbb">Multi-Language Honey-Logic erzeugen</a>
+<a class="tm-toc-l2" href="#72b0a9595834">Warum Honey-Logic funktioniert</a>
+<a class="tm-toc-l2" href="#45a6cbe6a2a3">Erkennung</a>
+<a class="tm-toc-l2" href="#f147107e6794">Vorsicht bei produktivem Code</a>
+<a class="tm-toc-l2" href="#5fb95de83c29">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

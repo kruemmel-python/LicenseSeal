@@ -1,0 +1,135 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="20630b120d22" data-token="20630b120d22">14 Glossar</h1>
+<h2 id="0b5448e2dc7e" data-token="0b5448e2dc7e">AGPL</h2>
+<p data-token="e52ed4d7dc1f">Affero General Public License. Starke Copyleft-Lizenz, besonders relevant bei Netzwerkdiensten.</p>
+<h2 id="6f6c9485fea9" data-token="6f6c9485fea9">AI-Code-Laundering</h2>
+<p data-token="1a00354967c9">Versuch, Code durch KI-gestützte Umschreibung so zu verändern, dass Herkunft oder Lizenzspuren verschwinden.</p>
+<h2 id="653a4fbb11c1" data-token="653a4fbb11c1">AST</h2>
+<p data-token="fd8b131cc83b">Abstract Syntax Tree. Baumartige Darstellung der Syntax eines Programms.</p>
+<h2 id="3e263823393c" data-token="3e263823393c">Boundary Marker</h2>
+<p data-token="2cb0c226bf86">LicenseSeal-Kommentarblock, der einen geschützten Bereich markiert.</p>
+<h2 id="d5ca31000539" data-token="d5ca31000539">CFG</h2>
+<p data-token="60684fc823fb">Control Flow Graph. Graph der möglichen Ausführungspfade eines Programms.</p>
+<h2 id="84ee1ec95b28" data-token="84ee1ec95b28">CONTENT_DIGEST</h2>
+<p data-token="6218866d7e39">Kryptografischer Fingerabdruck relevanter Inhalte.</p>
+<h2 id="02bf47faae64" data-token="02bf47faae64">DFG</h2>
+<p data-token="2afa5df65377">Data Flow Graph. Graph, der zeigt, wie Daten und Variablen voneinander abhängen.</p>
+<h2 id="87dd67106e04" data-token="87dd67106e04">Evidence Item</h2>
+<p data-token="75f7387a45f8">Ein einzelnes technisches Indiz, zum Beispiel Honey-Logic-Treffer oder hoher Shingle-Overlap.</p>
+<h2 id="5ddf7945fd5b" data-token="5ddf7945fd5b">Firehose</h2>
+<p data-token="d198a9506e8a">Kontinuierlicher Scanner für Kandidaten-Repositories.</p>
+<h2 id="f1f9721be80d" data-token="f1f9721be80d">Honey-Logic</h2>
+<p data-token="c05c5b19d704">Harmlose, funktional korrekte Code-Sentinels mit seltenen mathematischen Strukturen.</p>
+<h2 id="94d55e6531ac" data-token="94d55e6531ac">Inbound Paste Protection</h2>
+<p data-token="61378b82b70a">IDE/LSP-Funktion, die eingefügten Code auf Lizenz- und IP-Risiken prüft.</p>
+<h2 id="e0e501f95893" data-token="e0e501f95893">LLM Interceptor</h2>
+<p data-token="e97c8111931d">Lokaler Proxy oder Scanner, der Prompts und Modellantworten defensiv prüft.</p>
+<h2 id="ab211053517a" data-token="ab211053517a">LM Studio</h2>
+<p data-token="ad7513fcb617">Lokale Desktop-Anwendung zum Ausführen von LLMs mit OpenAI-kompatibler API.</p>
+<h2 id="37cab3061407" data-token="37cab3061407">Marker</h2>
+<p data-token="0dc0490addf7">Maschinenlesbare Lizenz- und Herkunftsinformation in Dateien.</p>
+<h2 id="77c575e0758a" data-token="77c575e0758a">Ollama</h2>
+<p data-token="65b5c1a9563f">Lokale LLM-Laufzeitumgebung, häufig auf Port 11434.</p>
+<h2 id="76a65164d0f2" data-token="76a65164d0f2">OSINT</h2>
+<p data-token="f3fc2a395ee0">Open Source Intelligence. Suche in öffentlich zugänglichen Quellen.</p>
+<h2 id="0f98bb6ae9d3" data-token="0f98bb6ae9d3">Provenance</h2>
+<p data-token="7d5aa3a604aa">Herkunft und Nachvollziehbarkeit eines Artefakts.</p>
+<h2 id="07f5f875a15e" data-token="07f5f875a15e">Registry</h2>
+<p data-token="3b874b5141f0">Speicher für Projekte, Fingerprints, Scans und Evidence.</p>
+<h2 id="51b2d965650f" data-token="51b2d965650f">SCA</h2>
+<p data-token="5f8666a416d9">Software Composition Analysis. Analyse von Komponenten, Abhängigkeiten und Lizenzen.</p>
+<h2 id="eb1f1154bec9" data-token="eb1f1154bec9">Shingle</h2>
+<p data-token="95f40f086fb0">Kleiner Codeabschnitt oder Token-Fenster, das für Ähnlichkeitsvergleiche genutzt wird.</p>
+<h2 id="7434bd5ede4b" data-token="7434bd5ede4b">Sidecar-Datei</h2>
+<p data-token="78e0c1a85000">Zusätzliche Metadatendatei neben einem Artefakt, ohne das Artefakt selbst zu verändern.</p>
+<h2 id="0724da41fcf9" data-token="0724da41fcf9">Watermark</h2>
+<p data-token="4a64a133b42d">Verstecktes oder sichtbares Wiedererkennungssignal.</p></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#20630b120d22">14 Glossar</a>
+<a class="tm-toc-l2" href="#0b5448e2dc7e">AGPL</a>
+<a class="tm-toc-l2" href="#6f6c9485fea9">AI-Code-Laundering</a>
+<a class="tm-toc-l2" href="#653a4fbb11c1">AST</a>
+<a class="tm-toc-l2" href="#3e263823393c">Boundary Marker</a>
+<a class="tm-toc-l2" href="#d5ca31000539">CFG</a>
+<a class="tm-toc-l2" href="#84ee1ec95b28">CONTENT_DIGEST</a>
+<a class="tm-toc-l2" href="#02bf47faae64">DFG</a>
+<a class="tm-toc-l2" href="#87dd67106e04">Evidence Item</a>
+<a class="tm-toc-l2" href="#5ddf7945fd5b">Firehose</a>
+<a class="tm-toc-l2" href="#f1f9721be80d">Honey-Logic</a>
+<a class="tm-toc-l2" href="#94d55e6531ac">Inbound Paste Protection</a>
+<a class="tm-toc-l2" href="#e0e501f95893">LLM Interceptor</a>
+<a class="tm-toc-l2" href="#ab211053517a">LM Studio</a>
+<a class="tm-toc-l2" href="#37cab3061407">Marker</a>
+<a class="tm-toc-l2" href="#77c575e0758a">Ollama</a>
+<a class="tm-toc-l2" href="#76a65164d0f2">OSINT</a>
+<a class="tm-toc-l2" href="#0f98bb6ae9d3">Provenance</a>
+<a class="tm-toc-l2" href="#07f5f875a15e">Registry</a>
+<a class="tm-toc-l2" href="#51b2d965650f">SCA</a>
+<a class="tm-toc-l2" href="#eb1f1154bec9">Shingle</a>
+<a class="tm-toc-l2" href="#7434bd5ede4b">Sidecar-Datei</a>
+<a class="tm-toc-l2" href="#0724da41fcf9">Watermark</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

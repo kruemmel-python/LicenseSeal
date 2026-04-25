@@ -1,0 +1,144 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="af7dad1631ad" data-token="af7dad1631ad">05 Audit, Vergleich und Reports</h1>
+<h2 id="7699e46c6fc4" data-token="7699e46c6fc4">Audit</h2>
+<p data-token="6e9bf4eae68a">Ein Audit prüft ein Projekt auf Markierungen und optional Signaturen.</p>
+<pre data-token="88f68b4c88af"><code class="language-powershell">licenseseal audit .
+</code></pre>
+<p data-token="3f7b1eb279a0">Typische Fragen:</p>
+<ul>
+<li data-token="30d4c16c2fb2">Sind alle relevanten Dateien markiert?</li>
+<li data-token="5a42fc61a681">Fehlen Boundaries?</li>
+<li data-token="2b2d0a684ae1">Sind Signaturen gültig?</li>
+<li data-token="9dcef2fc18be">Wurde eine Datei nachträglich geändert?</li>
+</ul>
+<h2 id="e32a0613da4f" data-token="e32a0613da4f">Vergleich zweier Projekte</h2>
+<pre data-token="5437f9b957e2"><code class="language-powershell">licenseseal compare ./original ./suspected --output compare.json
+</code></pre>
+<p data-token="247ca7aba861">Nutze diesen Befehl, wenn du zwei Codebasen vergleichen möchtest.</p>
+<h2 id="6d67c671d7a9" data-token="6d67c671d7a9">Graph-Vergleich</h2>
+<p data-token="773a034eb2ef">Für stärker refaktorierten Code kann der CFG/DFG-Vergleich helfen:</p>
+<pre data-token="79c39ad5b784"><code class="language-powershell">licenseseal graph compare ./original ./suspected
+</code></pre>
+<p data-token="48ed8045865a">Graph-Fingerprinting betrachtet nicht nur Syntax, sondern auch Kontroll- und Datenfluss.</p>
+<h2 id="2cc65f2ded24" data-token="2cc65f2ded24">Side-by-Side Diff</h2>
+<p data-token="034ed9307017">LicenseSeal kann Evidence für visuelle Vergleiche erzeugen. Ziel ist eine nachvollziehbare Darstellung:</p>
+<pre data-token="c36611328102"><code class="language-text">Original Datei        Verdächtige Datei
+Zeile 10-25      ↔    Zeile 44-61
+Honey-Logic      ↔    Honey-Logic
+Shingle Match    ↔    Shingle Match
+</code></pre>
+<p data-token="f97f338d51f8">Nutze Report-Befehle:</p>
+<pre data-token="b3a6718f5dae"><code class="language-powershell">licenseseal report --help
+licenseseal report dmca --help
+licenseseal report certificate --help
+</code></pre>
+<h2 id="91acf75758ef" data-token="91acf75758ef">Legal- und Evidence-Reports</h2>
+<p data-token="f86273d9e10a">Ein professioneller Report sollte enthalten:</p>
+<ul>
+<li data-token="2132a617d5d2">Zeitpunkt des Scans</li>
+<li data-token="10bbac44d6ef">Originalprojekt</li>
+<li data-token="5c7495d46673">Kandidatenprojekt</li>
+<li data-token="0ba6b0c86382">erkannte Marker</li>
+<li data-token="bdb28e45750c">Honey-Logic-Treffer</li>
+<li data-token="6a27498354ea">strukturelle Ähnlichkeit</li>
+<li data-token="efd86e2d60cf">Graph-Ähnlichkeit</li>
+<li data-token="cb0e2ffc6582">Dateipfade</li>
+<li data-token="5f446dd5aa2f">Hashes/Digests</li>
+<li data-token="06babc05f764">Tool-Version</li>
+<li data-token="19155482c287">Grenzen der Aussagekraft</li>
+</ul>
+<h2 id="97c2c9e7fbae" data-token="97c2c9e7fbae">Gute Interpretation</h2>
+<p data-token="bbbfe522e183">Ein Score ist ein technischer Hinweis, kein juristisches Urteil.</p>
+<p data-token="0ce1dac5a7bb">Starke Evidenz entsteht durch Kombination:</p>
+<pre data-token="35d52a64ef1c"><code class="language-text">Boundary Marker gefunden
++ Honey-Logic Treffer
++ hohe Shingle-Ähnlichkeit
++ ähnlicher CFG/DFG-Fingerprint
+= hoher Verdachtswert
+</code></pre>
+<p data-token="0f059528c7da">Schwache Evidenz:</p>
+<pre data-token="9473dc4a405c"><code class="language-text">Nur ähnliche Dateinamen
+= niedriger Verdachtswert
+</code></pre>
+<h2 id="69f7a77f59f2" data-token="69f7a77f59f2">Übung</h2>
+<ul>
+<li data-token="63f1084d85a5">Kopiere ein Testprojekt in zwei Ordner</li>
+<li data-token="a33a6ff761e9">Benenne im zweiten Ordner Variablen um</li>
+<li data-token="899e72d1d39a">Führe <code>licenseseal compare</code> aus</li>
+<li data-token="f3f833f08580">Führe <code>licenseseal graph compare</code> aus</li>
+<li data-token="981bb2d27fad">Vergleiche die Ergebnisse</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#af7dad1631ad">05 Audit, Vergleich und Reports</a>
+<a class="tm-toc-l2" href="#7699e46c6fc4">Audit</a>
+<a class="tm-toc-l2" href="#e32a0613da4f">Vergleich zweier Projekte</a>
+<a class="tm-toc-l2" href="#6d67c671d7a9">Graph-Vergleich</a>
+<a class="tm-toc-l2" href="#2cc65f2ded24">Side-by-Side Diff</a>
+<a class="tm-toc-l2" href="#91acf75758ef">Legal- und Evidence-Reports</a>
+<a class="tm-toc-l2" href="#97c2c9e7fbae">Gute Interpretation</a>
+<a class="tm-toc-l2" href="#69f7a77f59f2">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

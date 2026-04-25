@@ -1,0 +1,138 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="47fd339ab06a" data-token="47fd339ab06a">12 SCA und Lizenzkonflikte</h1>
+<h2 id="c6b3ed4c9e7c" data-token="c6b3ed4c9e7c">Ziel</h2>
+<p data-token="62528dff5c83">LicenseSeal soll nicht nur Marker setzen, sondern auch verhindern, dass falsche oder widersprüchliche Lizenzinformationen injiziert werden.</p>
+<h2 id="4d596817c160" data-token="4d596817c160">Was ist SCA?</h2>
+<p data-token="0711f26baa78">SCA bedeutet Software Composition Analysis. Es geht darum, Projektmetadaten und Abhängigkeiten auf Lizenzrisiken zu prüfen.</p>
+<h2 id="b7c31ef29be5" data-token="b7c31ef29be5">Unterstützte Manifest-Dateien</h2>
+<p data-token="817f2301b111">LicenseSeal kann unter anderem auswerten:</p>
+<ul>
+<li data-token="a184cf07121c"><code>pyproject.toml</code></li>
+<li data-token="4f41fb8e6d48"><code>package.json</code></li>
+<li data-token="fd574c9c277d"><code>pom.xml</code></li>
+<li data-token="79fcac1eb80c"><code>Cargo.toml</code></li>
+<li data-token="448435667c2d"><code>go.mod</code></li>
+<li data-token="80c7ff7cf466"><code>requirements.txt</code></li>
+</ul>
+<h2 id="04e37f714f72" data-token="04e37f714f72">Projekt prüfen</h2>
+<pre data-token="cae889287cc3"><code class="language-powershell">licenseseal sca check . --license MIT
+</code></pre>
+<p data-token="5d7d7e056027">Mit Fehlercode bei Konflikten:</p>
+<pre data-token="bb894e118d77"><code class="language-powershell">licenseseal sca check . --license AGPL-3.0 --fail-on-error
+</code></pre>
+<h2 id="3247fbd0a4cb" data-token="3247fbd0a4cb">Inject mit SCA</h2>
+<p data-token="59ec5c6e5a14">Standardmäßig wird beim Inject geprüft:</p>
+<pre data-token="f641d113e53a"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot;
+</code></pre>
+<p data-token="af7f52291175">Wenn ein Konflikt erkannt wird, kann LicenseSeal warnen oder blockieren.</p>
+<h2 id="79233d5a1f78" data-token="79233d5a1f78">Force und Skip</h2>
+<p data-token="03ab46a1e300">Nur bewusst verwenden:</p>
+<pre data-token="7f9eaee4fae3"><code class="language-powershell">licenseseal inject . --license AGPL-3.0 --owner &quot;ACME GmbH&quot; --force
+</code></pre>
+<p data-token="e76c89446ffd">SCA komplett überspringen:</p>
+<pre data-token="0ad68e821a3c"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --skip-sca
+</code></pre>
+<h2 id="f489a82ab19a" data-token="f489a82ab19a">Beispielkonflikte</h2>
+<table><tbody>
+<tr><td data-token="156500685d68">Projektsituation</td><td data-token="6131b59c5b76">Geplante Lizenz</td></tr>
+<tr><td data-token="c1434e715a02">Ergebnis</td><td data-token="91cc2c86f11c">Projekt deklariert MIT</td></tr>
+<tr><td data-token="4c7c2b21700b">MIT</td><td data-token="5a3d7a465b6e">OK</td></tr>
+<tr><td data-token="15174c642750">Projekt deklariert Proprietary</td><td data-token="62754bf56e8a">AGPL-3.0</td></tr>
+<tr><td data-token="a51fae99b9e5">Warnung/Fehler</td><td data-token="09e10a205eaa">package.json deklariert Apache-2.0</td></tr>
+<tr><td data-token="d2046cb4c564">MIT</td><td data-token="aea27e7642fc">meist kompatibel, prüfen</td></tr>
+<tr><td data-token="a9e303c33e8f">AGPL-Abhängigkeit in proprietärem Projekt</td><td data-token="8c2f85bd3e2e">Proprietary</td></tr>
+<tr><td data-token="84f1086c71ab">hohes Risiko</td></tr>
+</tbody></table>
+<h2 id="3f972109c7f5" data-token="3f972109c7f5">Wichtiger Hinweis</h2>
+<p data-token="4d953be5526b">LicenseSeal ersetzt keine Rechtsberatung. Das Tool liefert technische Hinweise und Compliance-Warnungen. Lizenzentscheidungen sollten bei relevanten Projekten durch Legal geprüft werden.</p>
+<h2 id="0e70dc4d3e93" data-token="0e70dc4d3e93">Empfohlener Workflow</h2>
+<pre data-token="3e1bdad2b21f"><code class="language-text">1. sca check ausführen
+2. Konflikte prüfen
+3. Lizenzentscheidung dokumentieren
+4. inject ausführen
+5. audit in CI aktivieren
+</code></pre>
+<h2 id="ee59161fc652" data-token="ee59161fc652">Übung</h2>
+<ul>
+<li data-token="946eaebc262d">Lege eine <code>package.json</code> mit <code>&quot;license&quot;: &quot;MIT&quot;</code> an</li>
+<li data-token="26a2a02e3b11">Führe <code>licenseseal sca check . --license MIT</code> aus</li>
+<li data-token="5810608dbc39">Wiederhole mit <code>--license AGPL-3.0</code></li>
+<li data-token="f0caf669832a">Vergleiche Warnungen und Exit Codes</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#47fd339ab06a">12 SCA und Lizenzkonflikte</a>
+<a class="tm-toc-l2" href="#c6b3ed4c9e7c">Ziel</a>
+<a class="tm-toc-l2" href="#4d596817c160">Was ist SCA?</a>
+<a class="tm-toc-l2" href="#b7c31ef29be5">Unterstützte Manifest-Dateien</a>
+<a class="tm-toc-l2" href="#04e37f714f72">Projekt prüfen</a>
+<a class="tm-toc-l2" href="#3247fbd0a4cb">Inject mit SCA</a>
+<a class="tm-toc-l2" href="#79233d5a1f78">Force und Skip</a>
+<a class="tm-toc-l2" href="#f489a82ab19a">Beispielkonflikte</a>
+<a class="tm-toc-l2" href="#3f972109c7f5">Wichtiger Hinweis</a>
+<a class="tm-toc-l2" href="#0e70dc4d3e93">Empfohlener Workflow</a>
+<a class="tm-toc-l2" href="#ee59161fc652">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

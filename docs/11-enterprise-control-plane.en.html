@@ -1,0 +1,146 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="242069df3642" data-token="242069df3642">Enterprise Control Plane</h1>
+<h2 id="445d4cbe3dad" data-token="445d4cbe3dad">Objective</h2>
+<p data-token="9447d3ae9274">The Control Plane is an API and dashboard foundation for Teams, Legal, Security, and Compliance.</p>
+<h2 id="b34fd5055141" data-token="b34fd5055141">Installation</h2>
+<pre data-token="4a1a1f36e927"><code class="language-powershell">python -m pip install -e &quot;.[control-plane]&quot;
+</code></pre>
+<h2 id="32e37a2a7124" data-token="32e37a2a7124">Start</h2>
+<pre data-token="fb64ed1f8c76"><code class="language-powershell">licenseseal control-plane serve --port 8787
+</code></pre>
+<p data-token="0397e1c70b43">Then open in the browser:</p>
+<pre data-token="042b07d434c1"><code class="language-text">http://localhost:8787
+</code></pre>
+<p data-token="016a048d442f">Depending on configuration, only the API may be available.</p>
+<h2 id="42daa52816f8" data-token="42daa52816f8">Authentication</h2>
+<p data-token="d9932924c006">The Control Plane supports API-key-based authentication as a robust local foundation. SSO/OIDC/SAML are prepared as enterprise extensions and depend in practice on the Identity Provider.</p>
+<p data-token="5c8889e4d122">Typical Roles:</p>
+<table><tbody>
+<tr><td data-token="40f664f66f01">Role</td><td data-token="dd421ae210f6">Right</td></tr>
+<tr><td data-token="1bfddfa7ab4a">admin</td><td data-token="26615d2f7734">all</td></tr>
+<tr><td data-token="458c55bb0920">legal</td><td data-token="69dcaa658466">Reports, Evidence, Alerts</td></tr>
+<tr><td data-token="f3a9de15a1d6">Developer</td><td data-token="560c669d7c01">Project and Scan View</td></tr>
+<tr><td data-token="af71f10b5318">Viewer</td><td data-token="328eb97e99a3">Read Only</td></tr>
+</tbody></table>
+<h2 id="e74a18b37ede" data-token="e74a18b37ede">Important Areas</h2>
+<h3 id="84a02c42832b" data-token="84a02c42832b">Projects</h3>
+<ul>
+<li data-token="ec0560556d39">registered projects</li>
+<li data-token="4ef482eb468e">Licenses</li>
+<li data-token="1b68a4cb05c5">Owner</li>
+<li data-token="eb3e115fa2a6">Fingerprints</li>
+<li data-token="69115445c1d9">Status</li>
+</ul>
+<h3 id="086feeb65209" data-token="086feeb65209">Scans</h3>
+<ul>
+<li data-token="e1c0e0ff961c">Firehose Results</li>
+<li data-token="50d6ae8bd24e">Applicants</li>
+<li data-token="e4d1a64302cf">Scores</li>
+<li data-token="9bfeeccfaefe">Evidence Items</li>
+</ul>
+<h3 id="70420eda4ef3" data-token="70420eda4ef3">Alerts</h3>
+<ul>
+<li data-token="d734d1a30bf7">High Similarity Matches</li>
+<li data-token="ea6a91133275">Incompatible Licenses</li>
+<li data-token="c5cb92e35018">incompatible licenses</li>
+<li data-token="eef9e1f69659">suspicious LLM output</li>
+</ul>
+<h3 id="aa964c48a092" data-token="aa964c48a092">Webhooks</h3>
+<ul>
+<li data-token="8cafd4731a02">Slack</li>
+<li data-token="e8ced1439d83">Jira</li>
+<li data-token="758cd573fee4">generic HTTP endpoints</li>
+<li data-token="54eecd21f7f5">internal SOAR/SIEM systems</li>
+</ul>
+<h2 id="e9de5b30eda9" data-token="e9de5b30eda9">Example Webhook Event</h2>
+<pre data-token="268cc858172a"><code class="language-json">{
+  &quot;event&quot;: &quot;high_similarity_detected&quot;,
+  &quot;project&quot;: &quot;payment-service&quot;,
+  &quot;score&quot;: 0.91,
+  &quot;candidate&quot;: &quot;https://github.com/example/suspected&quot;
+}
+</code></pre>
+<p data-token="088e48fc7cf1">Send CLI Event:</p>
+<pre data-token="3f83b98833f9"><code class="language-powershell">licenseseal control-plane event --help
+</code></pre>
+<h2 id="bbe51011bbb8" data-token="bbe51011bbb8">Production Notes:</h2>
+<p data-token="c48f11cf43c1">For Production:</p>
+<ul>
+<li data-token="b19324264179">Operate behind a Reverse Proxy:</li>
+<li data-token="d2529b8c9b8a">Enable TLS</li>
+<li data-token="a7e955befa4d">Rotate API Keys</li>
+<li data-token="964e7b2428b9">Use PostgreSQL instead of local files</li>
+<li data-token="cb4ae2a58e49">Centralize log collection</li>
+<li data-token="8f2820b9ed27">Whitelist Webhook Targets</li>
+<li data-token="e5cce8ff9c62">Regularly review RBAC</li>
+</ul>
+<h2 id="0f7d060a9f84" data-token="0f7d060a9f84">Exercise</h2>
+<ul>
+<li data-token="6aa92fc2796d">Start the Control Plane locally</li>
+<li data-token="591340a062a6">Call the API in a browser</li>
+<li data-token="1239e703687d">register a test project</li>
+<li data-token="f0736d99ab3e">Send a test event</li>
+<li data-token="9c10e52e62ca">Check if it appears in the Alert view</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#242069df3642">11 Enterprise Control Plane</a>
+<a class="tm-toc-l2" href="#445d4cbe3dad">Ziel</a>
+<a class="tm-toc-l2" href="#b34fd5055141">Installation</a>
+<a class="tm-toc-l2" href="#32e37a2a7124">Starten</a>
+<a class="tm-toc-l2" href="#42daa52816f8">Authentifizierung</a>
+<a class="tm-toc-l2" href="#e74a18b37ede">Wichtige Bereiche</a>
+<a class="tm-toc-l3" href="#84a02c42832b">Projekte</a>
+<a class="tm-toc-l3" href="#086feeb65209">Scans</a>
+<a class="tm-toc-l3" href="#70420eda4ef3">Alerts</a>
+<a class="tm-toc-l3" href="#aa964c48a092">Webhooks</a>
+<a class="tm-toc-l2" href="#e9de5b30eda9">Beispiel Webhook Event</a>
+<a class="tm-toc-l2" href="#bbe51011bbb8">Produktionshinweise</a>
+<a class="tm-toc-l2" href="#0f7d060a9f84">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script></body></html>

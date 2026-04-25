@@ -1,0 +1,173 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="5047bfade2ec" data-token="5047bfade2ec">02 Core Workflows: Inject, Audit, Compare, Remove</h1>
+<h2 id="4b515dcc964d" data-token="4b515dcc964d">Überblick</h2>
+<p data-token="963fba93ea70">Die vier wichtigsten Grundbefehle sind:</p>
+<pre data-token="9c1d9468edff"><code class="language-text">inject  → Marker einfügen oder aktualisieren
+audit   → Projekt prüfen
+compare → zwei Projekte strukturell vergleichen
+remove  → Marker entfernen
+</code></pre>
+<h2 id="0eb2b3489685" data-token="0eb2b3489685">Inject</h2>
+<h3 id="8d24a2474991" data-token="8d24a2474991">Standard</h3>
+<pre data-token="c2bc8d019073"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot;
+</code></pre>
+<h3 id="44a355c75018" data-token="44a355c75018">Mit Projektname</h3>
+<pre data-token="98844a05666c"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --project &quot;payment-service&quot;
+</code></pre>
+<h3 id="352530380a4f" data-token="352530380a4f">Aktualisieren vorhandener Marker</h3>
+<pre data-token="c47cf2f928c3"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --update
+</code></pre>
+<h3 id="e4338a84c90e" data-token="e4338a84c90e">Konfigurationsdateien einschließen</h3>
+<p data-token="51a57d5a7a06">Standardmäßig werden Quellcodedateien priorisiert. Wenn du auch Konfigurationsdateien markieren möchtest:</p>
+<pre data-token="9a51150f305e"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --include-configs
+</code></pre>
+<h3 id="b71909c2d93a" data-token="b71909c2d93a">Ordner ausschließen</h3>
+<pre data-token="2b3969e491cf"><code class="language-powershell">licenseseal inject . --exclude-dir node_modules --exclude-dir dist --exclude-dir build
+</code></pre>
+<h2 id="df194e4b113c" data-token="df194e4b113c">Signierte Marker</h2>
+<p data-token="8c525dd2413e">Für stärkere Integrität kannst du Schlüssel erzeugen:</p>
+<pre data-token="53e465d655d9"><code class="language-powershell">licenseseal keygen private.pem public.pem
+</code></pre>
+<p data-token="4c4b8dc10e89">Danach signiert injizieren:</p>
+<pre data-token="fb7b6e0590e1"><code class="language-powershell">licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --sign-key private.pem
+</code></pre>
+<p data-token="a65d663131d6">Audit mit Signaturprüfung:</p>
+<pre data-token="e0aff493dfbd"><code class="language-powershell">licenseseal audit . --verify-key public.pem
+</code></pre>
+<h2 id="b2d2a4e1a84e" data-token="b2d2a4e1a84e">Audit</h2>
+<pre data-token="458c8b130f5a"><code class="language-powershell">licenseseal audit .
+</code></pre>
+<p data-token="3f2e845960ac">Mit GitHub-Annotationen für CI:</p>
+<pre data-token="b44790bd9666"><code class="language-powershell">licenseseal audit . --format github
+</code></pre>
+<p data-token="c4226b0395bb">Mit Signaturprüfung:</p>
+<pre data-token="b28fcef62cd1"><code class="language-powershell">licenseseal audit . --verify-key public.pem
+</code></pre>
+<h2 id="95e87b438e1c" data-token="95e87b438e1c">Compare</h2>
+<p data-token="cf7871d74919">Vergleiche ein Originalprojekt mit einem verdächtigen Projekt:</p>
+<pre data-token="208150ac5abf"><code class="language-powershell">licenseseal compare C:\repos\original C:\repos\suspected --output compare.json
+</code></pre>
+<p data-token="58fa09aef805">Typische Ausgabe enthält:</p>
+<ul>
+<li data-token="798919715412">strukturelle Ähnlichkeit</li>
+<li data-token="fbddcd013d4e">Lizenzstatus</li>
+<li data-token="9e39bbc7c7f6">betroffene Dateien</li>
+<li data-token="8f6d2a0a1e24">Hinweise auf fehlende Marker</li>
+</ul>
+<h2 id="e965afcca294" data-token="e965afcca294">Remove</h2>
+<pre data-token="2b78be92afa0"><code class="language-powershell">licenseseal remove .
+</code></pre>
+<p data-token="348940d1b42a">Mit Backup:</p>
+<pre data-token="af20036f9559"><code class="language-powershell">licenseseal remove . --backup
+</code></pre>
+<h2 id="0e4f79e66807" data-token="0e4f79e66807">Schreib-Policies</h2>
+<p data-token="0408debb7ff5">Je nach Projektstand kann eine Write-Policy sinnvoll sein. Beispiele:</p>
+<pre data-token="e996740c69b4"><code class="language-powershell">licenseseal inject . --write-policy skip-existing
+licenseseal inject . --write-policy overwrite
+</code></pre>
+<p data-token="7c9d92eeccad">Nutze <code>licenseseal inject --help</code>, um die im aktuellen Build verfügbaren Optionen zu sehen.</p>
+<h2 id="b96c04b2317a" data-token="b96c04b2317a">Best Practices</h2>
+<ul>
+<li data-token="60feee8be51b">Nutze <code>--dry-run</code>, bevor du ein großes Repository veränderst.</li>
+<li data-token="bc986a5373ce">Schließe generierte Ordner aus.</li>
+<li data-token="a4d7278f8872">Verwende Signaturen für Releases.</li>
+<li data-token="0a2b32ab39dd">Nutze CI, damit Marker nicht versehentlich verschwinden.</li>
+<li data-token="cf328c179d80">Dokumentiere Owner und Lizenz konsistent.</li>
+</ul>
+<h2 id="550618d72181" data-token="550618d72181">Mini-Workflow für echte Projekte</h2>
+<pre data-token="035e28c5edbd"><code class="language-powershell">git checkout -b chore/licenseseal
+licenseseal inject . --license MIT --owner &quot;ACME GmbH&quot; --project &quot;core-api&quot; --backup
+licenseseal audit .
+git diff
+git add .
+git commit -m &quot;Add LicenseSeal provenance markers&quot;
+</code></pre>
+<h2 id="e396e72a54e1" data-token="e396e72a54e1">Übung</h2>
+<ul>
+<li data-token="ccc12cc37f73">Markiere ein Testprojekt</li>
+<li data-token="7d1829014d42">Ändere eine markierte Datei</li>
+<li data-token="00bd2884af08">Führe Audit mit Signaturprüfung aus, falls du signierte Marker verwendest</li>
+<li data-token="58188a0b84c9">Vergleiche zwei leicht unterschiedliche Projektkopien mit <code>compare</code></li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#5047bfade2ec">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-toc-l2" href="#4b515dcc964d">Überblick</a>
+<a class="tm-toc-l2" href="#0eb2b3489685">Inject</a>
+<a class="tm-toc-l3" href="#8d24a2474991">Standard</a>
+<a class="tm-toc-l3" href="#44a355c75018">Mit Projektname</a>
+<a class="tm-toc-l3" href="#352530380a4f">Aktualisieren vorhandener Marker</a>
+<a class="tm-toc-l3" href="#e4338a84c90e">Konfigurationsdateien einschließen</a>
+<a class="tm-toc-l3" href="#b71909c2d93a">Ordner ausschließen</a>
+<a class="tm-toc-l2" href="#df194e4b113c">Signierte Marker</a>
+<a class="tm-toc-l2" href="#b2d2a4e1a84e">Audit</a>
+<a class="tm-toc-l2" href="#95e87b438e1c">Compare</a>
+<a class="tm-toc-l2" href="#e965afcca294">Remove</a>
+<a class="tm-toc-l2" href="#0e4f79e66807">Schreib-Policies</a>
+<a class="tm-toc-l2" href="#b96c04b2317a">Best Practices</a>
+<a class="tm-toc-l2" href="#550618d72181">Mini-Workflow für echte Projekte</a>
+<a class="tm-toc-l2" href="#e396e72a54e1">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>

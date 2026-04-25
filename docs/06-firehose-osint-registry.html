@@ -1,0 +1,149 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{max-width:860px;margin:48px auto;padding:0 24px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;color:#172033}
+pre{background:#101827;color:#e7edf7;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f5f7;padding:.12em .28em;border-radius:5px} pre code{background:transparent;padding:0}
+blockquote{border-left:4px solid #8ba4c4;margin-left:0;padding-left:16px;color:#445066}
+table{border-collapse:collapse;width:100%;margin:1.2em 0}td,th{border:1px solid #d5dbe5;padding:8px 10px}
+.tokenmark-admonition{border:1px solid #d5dbe5;border-left:6px solid #5b7cfa;padding:12px 16px;border-radius:10px;margin:1em 0;background:#f8faff}
+.tokenmark-admonition-title{font-weight:700}
+body.tokenmark-inspect [data-token]:hover{outline:2px solid #ff7a00;position:relative}
+body.tokenmark-inspect [data-token]:hover::after{content:attr(data-token);position:absolute;right:0;top:-1.8em;background:#111;color:white;font:12px monospace;padding:2px 6px;border-radius:4px;z-index:9999}
+</style></head><body class="tokenmark-inspect">
+<nav class="tm-sidebar"><strong>Docs</strong><a class="tm-nav-link" href="/00-installation.html">00 Installation und Grundbegriffe</a>
+<a class="tm-nav-link" href="/01-quickstart.html">01 Schnellstart: erstes Projekt schützen</a>
+<a class="tm-nav-link" href="/02-core-workflows.html">02 Core Workflows: Inject, Audit, Compare, Remove</a>
+<a class="tm-nav-link" href="/03-jupyter-datasets.html">03 Jupyter Notebooks und Datensätze</a>
+<a class="tm-nav-link" href="/04-watermark-honey-logic.html">04 Watermarking und Honey-Logic</a>
+<a class="tm-nav-link" href="/05-audit-compare-reports.html">05 Audit, Vergleich und Reports</a>
+<a class="tm-nav-link" href="/06-firehose-osint-registry.html">06 Registry, Firehose und OSINT</a>
+<a class="tm-nav-link" href="/07-ide-lsp-inbound-protection.html">07 IDE/LSP und Inbound Paste Protection</a>
+<a class="tm-nav-link" href="/08-llm-redteam-interceptor.html">08 LLM Red-Team, Ollama, LM Studio und Interceptor</a>
+<a class="tm-nav-link" href="/09-binary-provenance.html">09 Binary Provenance</a>
+<a class="tm-nav-link" href="/10-cicd-bot-github-actions.html">10 CI/CD Bot und GitHub Actions</a>
+<a class="tm-nav-link" href="/11-enterprise-control-plane.html">11 Enterprise Control Plane</a>
+<a class="tm-nav-link" href="/12-sca-license-compliance.html">12 SCA und Lizenzkonflikte</a>
+<a class="tm-nav-link" href="/13-troubleshooting.html">13 Troubleshooting</a>
+<a class="tm-nav-link" href="/14-glossary.html">14 Glossar</a>
+<a class="tm-nav-link" href="/README.html">LicenseSeal Dokumentation</a></nav><div class="tm-search"><input id="tm-search" placeholder="Search docs…" autocomplete="off"><div id="tm-search-results"></div></div>
+<script>
+(async()=>{try{
+const r=await fetch("/site_index.json"); const idx=await r.json();
+const q=document.getElementById("tm-search"), out=document.getElementById("tm-search-results");
+if(!q||!out)return;
+q.addEventListener("input",()=>{const v=q.value.toLowerCase().trim(); out.innerHTML="";
+ if(!v)return; idx.pages.filter(p=>(p.title+" "+p.text).toLowerCase().includes(v)).slice(0,8)
+ .forEach(p=>{const a=document.createElement("a"); a.href="/"+String(p.url||"").replace(/^[/]+/, ""); a.textContent=p.title; out.appendChild(a);});
+});
+}catch(e){}})();
+</script>
+<main class="tm-content"><h1 id="d1d9998569f1" data-token="d1d9998569f1">06 Registry, Firehose und OSINT</h1>
+<h2 id="1d793961122a" data-token="1d793961122a">Ziel</h2>
+<p data-token="49b646191739">Dieses Kapitel erklärt, wie LicenseSeal vom lokalen Audit zum kontinuierlichen IP-Radar wird.</p>
+<h2 id="a81fb0145a59" data-token="a81fb0145a59">Registry</h2>
+<p data-token="b74e9cf6a297">Die Registry speichert:</p>
+<ul>
+<li data-token="1481380ad33a">Projekte</li>
+<li data-token="6e7c37bb8d92">Fingerprints</li>
+<li data-token="c203d8085904">Honey-Logic-Signaturen</li>
+<li data-token="2b9ed0b570e8">Scan-Ergebnisse</li>
+<li data-token="02dc19a20ef9">Evidence Items</li>
+<li data-token="32836bd88266">Scores</li>
+<li data-token="adebf7888df5">Zeitpunkte</li>
+</ul>
+<p data-token="9fbebd1668bc">Initialisieren:</p>
+<pre data-token="7c6261c86d45"><code class="language-powershell">licenseseal registry init
+</code></pre>
+<p data-token="1358b7149034">Projekt registrieren:</p>
+<pre data-token="387d9d9d5759"><code class="language-powershell">licenseseal registry register .
+</code></pre>
+<p data-token="cd2a253437f2">Suchen oder listen:</p>
+<pre data-token="f5bd01a09db3"><code class="language-powershell">licenseseal registry list
+licenseseal registry search &quot;payment-service&quot;
+</code></pre>
+<h2 id="e16ab04dddee" data-token="e16ab04dddee">Firehose</h2>
+<p data-token="899f31a183cc">Die Firehose scannt Kandidaten:</p>
+<pre data-token="2b46b7de1260"><code class="language-powershell">licenseseal firehose scan C:\repos\suspected
+</code></pre>
+<p data-token="dbe29673356a">Oder eine Git-URL, falls Git verfügbar ist:</p>
+<pre data-token="76d08a5335d9"><code class="language-powershell">licenseseal firehose scan https://github.com/example/suspected-repo.git
+</code></pre>
+<h2 id="6b6f5bebb00d" data-token="6b6f5bebb00d">Queue-Modus</h2>
+<p data-token="559ae0d0650c">Für Enterprise-Skalierung kann die Firehose Jobs in eine Queue legen:</p>
+<pre data-token="22950d8f6029"><code class="language-powershell">licenseseal firehose enqueue https://github.com/example/suspected-repo.git
+licenseseal firehose worker
+</code></pre>
+<p data-token="85349bc82079">Redis/Celery sind optional. Ohne Infrastruktur bleibt der lokale Modus nutzbar.</p>
+<h2 id="28da60662b6c" data-token="28da60662b6c">OSINT</h2>
+<p data-token="fdbb69e0a2dd">OSINT-Module suchen aktiv nach Kandidaten auf Plattformen wie GitHub oder GitLab.</p>
+<pre data-token="997b826a87c3"><code class="language-powershell">licenseseal osint --help
+</code></pre>
+<p data-token="b9e04b0fde25">Typische Idee:</p>
+<pre data-token="78386846dbaf"><code class="language-powershell">licenseseal osint github --query &quot;_ls_fold_a1b2&quot; --enqueue
+</code></pre>
+<p data-token="9e9979fdd6ef">Je nach Build können konkrete Subcommands variieren. Prüfe:</p>
+<pre data-token="a8923a3f6c1b"><code class="language-powershell">licenseseal osint --help
+</code></pre>
+<h2 id="c1cc54356294" data-token="c1cc54356294">Empfohlener Enterprise-Ablauf</h2>
+<pre data-token="d38d1247d884"><code class="language-text">1. Eigenes Projekt markieren
+2. Projekt in Registry registrieren
+3. OSINT sucht Kandidaten
+4. Kandidaten landen in Queue
+5. Worker scannen Kandidaten
+6. Evidence Items werden gespeichert
+7. Control Plane zeigt Alerts
+8. Legal-Team prüft Reports
+</code></pre>
+<h2 id="8be6c8025cfb" data-token="8be6c8025cfb">Datenschutz und Rate Limits</h2>
+<p data-token="72f6cee2a63a">Bei öffentlichen APIs gilt:</p>
+<ul>
+<li data-token="d3e75324d090">API-Token sicher speichern</li>
+<li data-token="755b087320e8">Rate Limits beachten</li>
+<li data-token="3ccc64c9c9d5">keine unnötigen Daten klonen</li>
+<li data-token="f11a56482256">nur rechtmäßig zugängliche Quellen scannen</li>
+<li data-token="8c457045f4b3">Ergebnisse intern prüfen, bevor Maßnahmen erfolgen</li>
+</ul>
+<h2 id="918e4ea5ef77" data-token="918e4ea5ef77">Übung</h2>
+<ul>
+<li data-token="cd43d134e421">Registriere ein Testprojekt</li>
+<li data-token="0ca7cfce87d8">Kopiere es in einen zweiten Ordner</li>
+<li data-token="d82c759bb0ee">Scanne den zweiten Ordner mit Firehose</li>
+<li data-token="cd4fc14355f0">Prüfe, welche Evidence Signals erzeugt werden</li>
+</ul></main><aside class="tm-toc"><strong>On this page</strong><a class="tm-toc-l1" href="#d1d9998569f1">06 Registry, Firehose und OSINT</a>
+<a class="tm-toc-l2" href="#1d793961122a">Ziel</a>
+<a class="tm-toc-l2" href="#a81fb0145a59">Registry</a>
+<a class="tm-toc-l2" href="#e16ab04dddee">Firehose</a>
+<a class="tm-toc-l2" href="#6b6f5bebb00d">Queue-Modus</a>
+<a class="tm-toc-l2" href="#28da60662b6c">OSINT</a>
+<a class="tm-toc-l2" href="#c1cc54356294">Empfohlener Enterprise-Ablauf</a>
+<a class="tm-toc-l2" href="#8be6c8025cfb">Datenschutz und Rate Limits</a>
+<a class="tm-toc-l2" href="#918e4ea5ef77">Übung</a></aside>
+<script>
+window.addEventListener("message", ev=>{
+  if(!ev.data || ev.data.type!=="tokenmark-update") return;
+  const el=document.querySelector(`[data-token="${ev.data.id}"]`);
+  if(el) el.innerHTML=ev.data.target;
+});
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-token]");
+  if(el && window.parent && window.parent!==window){
+    window.parent.postMessage({type:"tokenmark-select", id:el.dataset.token}, "*");
+  }
+});
+</script><script>
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-token]");
+  if(!el || !document.body.classList.contains("tokenmark-inspect")) return;
+  e.preventDefault();
+  const tokenId=el.dataset.token;
+  const current=el.innerText || el.textContent || "";
+  const next=prompt("TokenMark Übersetzung für "+tokenId+":", current);
+  if(next===null) return;
+  try{
+    await fetch("/__tokenmark/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:tokenId,target:next})});
+    location.reload();
+  }catch(err){
+    navigator.clipboard?.writeText(tokenId);
+    console.log("TokenMark token:",tokenId,err);
+  }
+});
+</script><script>try{const es=new EventSource("/__tokenmark/events");es.onmessage=e=>{if(e.data==="reload")location.reload()}}catch(e){console.warn(e)}</script></body></html>
