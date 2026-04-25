@@ -1,0 +1,57 @@
+name: "LicenseSeal Audit"
+description: "Audit AI-readable LicenseSeal markers in a repository"
+inputs:
+  root:
+    description: "Directory to audit"
+    required: false
+    default: "."
+  verify-key:
+    description: "Optional Ed25519 public key path for signature verification"
+    required: false
+    default: ""
+  include-configs:
+    description: "Also audit selected config files"
+    required: false
+    default: "false"
+  auto-fix:
+    description: "Automatically inject/update markers when audit fails"
+    required: false
+    default: "false"
+  create-pr:
+    description: "Create a remediation pull request when auto-fix is enabled"
+    required: false
+    default: "false"
+  license:
+    description: "License used for auto-fix"
+    required: false
+    default: "MIT"
+  owner:
+    description: "Copyright owner used for auto-fix"
+    required: false
+    default: "UNKNOWN"
+runs:
+  using: "composite"
+  steps:
+    - name: Install LicenseSeal
+      shell: bash
+      run: |
+        python -m pip install -e ".[crypto,treesitter]" || python -m pip install -e .
+    - name: Run LicenseSeal audit
+      shell: bash
+      run: |
+        ARGS=("${{ inputs.root }}" "--format" "github")
+        if [ "${{ inputs.include-configs }}" = "true" ]; then
+          ARGS+=("--include-configs")
+        fi
+        if [ -n "${{ inputs.verify-key }}" ]; then
+          ARGS+=("--verify-key" "${{ inputs.verify-key }}")
+        fi
+        set +e
+        licenseseal audit "${ARGS[@]}"
+        STATUS=$?
+        set -e
+        if [ "$STATUS" -ne 0 ] && [ "${{ inputs.auto-fix }}" = "true" ]; then
+          licenseseal bot autofix "${{ inputs.root }}" --license "${{ inputs.license }}" --owner "${{ inputs.owner }}" --include-configs $([ "${{ inputs.create-pr }}" = "true" ] && echo "--create-pr")
+        else
+          exit "$STATUS"
+        fi

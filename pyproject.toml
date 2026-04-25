@@ -1,0 +1,108 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "licenseseal"
+version = "0.4.1"
+description = "Inject, audit, compare and manage AI-readable license boundaries in source projects."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "LicenseSeal Contributors" }
+]
+keywords = ["license", "provenance", "spdx", "ai", "audit", "copyright"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Environment :: Console",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Utilities"
+]
+
+[project.scripts]
+licenseseal = "licenseseal.cli:main"
+
+[tool.licenseseal]
+schema = "licenseseal.project.v1"
+
+
+[project.optional-dependencies]
+crypto = ["cryptography>=41"]
+treesitter = [
+  "tree-sitter>=0.20",
+  "tree-sitter-language-pack>=0.6"
+]
+# Extension 2: Semantic search with embeddings
+ai = [
+  "sentence-transformers>=2.2.0",
+  "torch>=2.0",
+  "numpy>=1.24",
+]
+# Extension 3: Trust infrastructure (DNS)
+dns = [
+  "dnspython>=2.4",
+]
+# Extension 5: LSP server
+lsp = [
+  "pygls>=1.0.0",
+]
+# Extension 2b: Enterprise registry
+enterprise = [
+  "psycopg2-binary>=2.9",
+  "requests>=2.31",
+]
+queue = [
+  "celery>=5.3",
+  "redis>=5.0",
+]
+control-plane = [
+  "fastapi>=0.100",
+  "uvicorn>=0.23",
+  "celery>=5.3",
+  "redis>=5.0",
+  "PyGithub>=2.0",
+]
+bot = [
+  "PyGithub>=2.0",
+]
+# Extension 5b: Legal reports
+reports = [
+  "weasyprint>=60.0",
+  "jinja2>=3.1",
+  "celery>=5.3",
+  "redis>=5.0",
+]
+# All extensions
+full = [
+  "cryptography>=41",
+  "tree-sitter>=0.20",
+  "tree-sitter-language-pack>=0.6",
+  "sentence-transformers>=2.2.0",
+  "torch>=2.0",
+  "numpy>=1.24",
+  "dnspython>=2.4",
+  "pygls>=1.0.0",
+  "psycopg2-binary>=2.9",
+  "requests>=2.31",
+  "weasyprint>=60.0",
+  "jinja2>=3.1",
+  "fastapi>=0.100",
+  "uvicorn>=0.23",
+  "celery>=5.3",
+  "redis>=5.0",
+  "PyGithub>=2.0",
+]
+
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["licenseseal", "licenseseal.*"]
+exclude = [
+  "tests",
+  "tests.*",
+  "examples",
+  "examples.*",
+  "Notebook_LM",
+  "Notebook_LM.*",
+]

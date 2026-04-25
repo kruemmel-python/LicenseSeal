@@ -1,0 +1,16 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  firehose-worker:
+    build: .
+    command: celery -A licenseseal.firehose_queue.celery_app worker --loglevel=INFO
+    environment:
+      LICENSESEAL_CELERY_BROKER: redis://redis:6379/0
+      LICENSESEAL_CELERY_BACKEND: redis://redis:6379/1
+      LICENSESEAL_DATABASE_URL: ${LICENSESEAL_DATABASE_URL:-postgresql://localhost:5432/licenseseal}
+      LICENSESEAL_FIREHOSE_WORKDIR: /tmp/licenseseal-firehose
+    depends_on:
+      - redis
